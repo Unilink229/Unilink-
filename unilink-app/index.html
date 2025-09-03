@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unilink｜留学生活 · 交易与社区</title>
+  <!-- Tailwind CDN -->
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root{--ink:#1d1d1f;--sub:#6e6e73;--line:#d2d2d7;--bg:#ffffff;--bg-alt:#f5f5f7;--radius:20px;--ease:cubic-bezier(.2,.7,.2,1)}
+    html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',Arial,sans-serif;scroll-behavior:smooth}
+    .container-apple{max-width:1200px;margin:0 auto;padding:0 24px}
+    .glass{backdrop-filter:saturate(180%) blur(20px);background:rgba(255,255,255,.82)}
+    .eyebrow{letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:var(--sub);font-weight:700}
+    .h1{font-size:64px;line-height:1.02;letter-spacing:-.02em;font-weight:800}
+    .h2{font-size:40px;line-height:1.1;letter-spacing:-.01em;font-weight:700}
+    .sub{font-size:18px;color:var(--sub)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 22px;border-radius:999px;font-weight:600;transition:transform .2s var(--ease),box-shadow .3s var(--ease),background .3s var(--ease)}
+    .btn-black{background:#000;color:#fff}
+    .btn-black:hover{transform:translateY(-2px)}
+    .btn-outline{border:1px solid #000;color:#000}
+    .btn-outline:hover{transform:translateY(-2px);background:#000;color:#fff}
+    .tile{border-radius:var(--radius);border:1px solid var(--line);background:#fff;transition:transform .25s var(--ease),box-shadow .3s var(--ease),border-color .2s var(--ease)}
+    .tile:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.06);border-color:#bcbcc2}
+    .hero{position:relative;overflow:hidden}
+    .hero-media{position:absolute;inset:0}
+    .hero-media img,.hero-media video{width:100%;height:100%;object-fit:cover;filter:saturate(105%)}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.25) 40%,rgba(0,0,0,.15) 65%,rgba(0,0,0,0));}
+    .hero-inner{position:relative;z-index:2;padding:120px 0}
+    .brand-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(8px);border:1px solid #e5e5ea;border-radius:14px;padding:8px 12px}
+    .brand-badge .dot{width:8px;height:8px;border-radius:50%;background:#34c759}
+    /* Animations */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .fade{animation:fadeUp .6s var(--ease) both}
+    .d1{animation-delay:.08s}.d2{animation-delay:.16s}.d3{animation-delay:.24s}
+    /* Responsive */
+    @media (max-width:1024px){.h1{font-size:44px}.h2{font-size:28px}.hero-inner{padding:96px 0}}
+    @media (max-width:640px){.h1{font-size:34px}.h2{font-size:22px}.hero-inner{padding:72px 0}}
+    .drawer{position:fixed;right:0;top:0;height:100vh;width:380px;max-width:92vw;background:#fff;border-left:1px solid var(--line);box-shadow:-20px 0 60px rgba(0,0,0,.12);transform:translateX(100%);transition:transform .3s var(--ease);z-index:60}
+    .drawer.active{transform:translateX(0)}
+    .drawer header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line)}
+  </style>
+</head>
+<body>
+  <!-- Top nav -->
+  <header class="sticky top-0 z-50 glass border-b border-[#e5e5ea]">
+    <div class="container-apple py-3 flex items-center justify-between">
+      <a href="#home" class="flex items-center gap-2" aria-label="Unilink 首页">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-black text-white text-sm font-bold">U</span>
+        <b>Unilink</b>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-[15px]" aria-label="主导航">
+        <a class="hover:opacity-70" href="#trade">交易</a>
+        <a class="hover:opacity-70" href="#community">社区</a>
+        <a class="hover:opacity-70" href="#reviews">院校评价</a>
+        <a class="hover:opacity-70" href="#resources">服务中心</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button id="publishBtnTop" class="btn btn-black">发布</button>
+        <button id="avatarBtn" class="w-9 h-9 rounded-full border flex items-center justify-center" aria-label="打开个人菜单">
+          <i class="fa-regular fa-user"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Full-bleed brand hero -->
+  <section id="home" class="hero bg-gradient-to-b from-gray-50 to-gray-100">
+    <div class="container-apple hero-inner relative z-10 text-center">
+      <div class="brand-badge fade mx-auto"><span class="dot"></span><span class="text-[13px]">留学中 · 品牌主阵地</span></div>
+      <h1 class="h1 mt-6 fade d1">留学生活，从这里连接</h1>
+      <p class="sub mt-3 max-w-2xl mx-auto fade d2">交易、社区与院校评价的统一入口。为在校留学生提供跑腿代购、二手交易、经验交流与择校参考。</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-4 fade d3">
+        <a href="#trade" class="btn btn-black">进入交易</a>
+        <a href="#community" class="btn btn-outline">进入社区</a>
+        <a href="#reviews" class="btn btn-outline">院校评价</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block: Trade (主线一) -->
+  <section id="trade" class="py-20 bg-[var(--bg)]">
+    <div class="container-apple">
+      <div class="flex items-end justify-between mb-6">
+        <div>
+          <div class="eyebrow">TRADE</div>
+          <h2 class="h2 mt-1">交易 · 任务 / 跑腿 / 二手 / 团购</h2>
+          <p class="sub mt-1">面向留学中用户的高频刚需，平台撮合更高效</p>
+        </div>
+        <button class="btn btn-outline" id="publishBtnTrade">发布需求</button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <a class="tile p-6 block" href="#"><h3 class="font-semibold text-lg">任务大厅</h3><p class="sub mt-1">悬赏占座、搬运行李、代购</p></a>
+        <a class="tile p-6 block" href="#"><h3 class="font-semibold text-lg">跑腿代购</h3><p class="sub mt-1">校内 30 分钟达 · 实时位置</p></a>
+        <a class="tile p-6 block" href="#"><h3 class="font-semibold text-lg">二手市场</h3><p class="sub mt-1">真图真价 · 当面验货</p></a>
+        <a class="tile p-6 block" href="#"><h3 class="font-semibold text-lg">校园团购</h3><p class="sub mt-1">本地商家拼单优惠</p></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block: Community (主线二) -->
+  <section id="community" class="py-20 bg-[var(--bg-alt)]">
+    <div class="container-apple">
+      <div class="flex items-end justify-between mb-6">
+        <div>
+          <div class="eyebrow">COMMUNITY</div>
+          <h2 class="h2 mt-1">社区 · 热门话题与活动</h2>
+          <p class="sub mt-1">真实交流，沉淀高质量经验与口碑</p>
+        </div>
+        <a class="btn btn-outline" href="#">进入社区</a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <article class="tile p-6"><h4 class="font-semibold">期末高效复习法</h4><p class="sub mt-1">延世 · 计算机 · 120 评论</p></article>
+        <article class="tile p-6"><h4 class="font-semibold">校内兼职怎么找？</h4><p class="sub mt-1">高丽 · 商学院 · 78 评论</p></article>
+        <article class="tile p-6"><h4 class="font-semibold">2025 租房避坑指南</h4><p class="sub mt-1">首尔 · 住房 · 233 评论</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block: Reviews (留学前关键入口) -->
+  <section id="reviews" class="py-20 bg-[var(--bg)]">
+    <div class="container-apple">
+      <div class="flex items-end justify-between mb-6">
+        <div>
+          <div class="eyebrow">REVIEWS</div>
+          <h2 class="h2 mt-1">院校评价（Beta）</h2>
+          <p class="sub mt-1">按国家/院校/专业浏览真实体验，辅助申请决策</p>
+        </div>
+        <a class="btn btn-outline" href="#">查看全部院校</a>
+      </div>
+      <div class="tile overflow-hidden">
+        <table class="min-w-full text-[15px]">
+          <thead class="bg-[#fafafa] border-b">
+            <tr>
+              <th class="text-left py-3 px-4">院校</th>
+              <th class="text-left py-3 px-4">专业</th>
+              <th class="text-left py-3 px-4">课程强度</th>
+              <th class="text-left py-3 px-4">生活便利</th>
+              <th class="text-left py-3 px-4">就业资源</th>
+              <th class="text-left py-3 px-4">总体评分</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b hover:bg-[#fafafa]"><td class="py-3 px-4">延世大学</td><td class="py-3 px-4">计算机科学</td><td class="py-3 px-4">★★★★☆</td><td class="py-3 px-4">★★★★☆</td><td class="py-3 px-4">★★★☆☆</td><td class="py-3 px-4 font-semibold">4.1</td></tr>
+            <tr class="border-b hover:bg-[#fafafa]"><td class="py-3 px-4">高丽大学</td><td class="py-3 px-4">金融工程</td><td class="py-3 px-4">★★★★☆</td><td class="py-3 px-4">★★★★☆</td><td class="py-3 px-4">★★★★☆</td><td class="py-3 px-4 font-semibold">4.4</td></tr>
+            <tr class="hover:bg-[#fafafa]"><td class="py-3 px-4">首尔大学</td><td class="py-3 px-4">设计学</td><td class="py-3 px-4">★★★☆☆</td><td class="py-3 px-4">★★★★★</td><td class="py-3 px-4">★★★★☆</td><td class="py-3 px-4 font-semibold">4.3</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block: Resources -->
+  <section id="resources" class="py-20 bg-[var(--bg-alt)]">
+    <div class="container-apple">
+      <h2 class="h2">常用服务</h2>
+      <p class="sub mt-1 mb-6">签证/住宿/校务/兼职等入口</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <a class="tile p-6 text-center" href="#"><i class="fa-solid fa-id-card text-2xl mb-2"></i><div class="font-semibold">学生证/校车</div><div class="sub">校务与交通</div></a>
+        <a class="tile p-6 text-center" href="#"><i class="fa-solid fa-shield-halved text-2xl mb-2"></i><div class="font-semibold">签证/居留</div><div class="sub">出入境相关</div></a>
+        <a class="tile p-6 text-center" href="#"><i class="fa-solid fa-house-chimney text-2xl mb-2"></i><div class="font-semibold">住宿/租房</div><div class="sub">校内外房源</div></a>
+        <a class="tile p-6 text-center" href="#"><i class="fa-solid fa-briefcase text-2xl mb-2"></i><div class="font-semibold">兼职/实习</div><div class="sub">岗位与内推</div></a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t">
+    <div class="container-apple py-10 text-[13px] text-[#6e6e73]">© 2025 Unilink · 留学生活 · 交易与社区</div>
+  </footer>
+
+  <!-- Right Drawer: 用户面板 / 导航列表 -->
+  <aside id="userDrawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="userPanelTitle">
+    <header class="px-5 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center">U</div>
+        <div>
+          <div class="font-semibold" id="userPanelTitle">未登录用户</div>
+          <div class="text-[12px] text-[#6e6e73]">点击下方登录 / 注册</div>
+        </div>
+      </div>
+      <button id="closeDrawerBtn" class="text-[#6e6e73]" aria-label="关闭"><i class="fas fa-times"></i></button>
+    </header>
+    <div class="p-5 space-y-2 text-[15px]">
+      <a href="#trade" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f7]"><i class="fa-solid fa-bag-shopping w-5 text-center"></i>交易</a>
+      <a href="#community" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f7]"><i class="fa-solid fa-people-group w-5 text-center"></i>社区</a>
+      <a href="#reviews" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f7]"><i class="fa-solid fa-graduation-cap w-5 text-center"></i>院校评价</a>
+      <a href="#resources" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f7]"><i class="fa-solid fa-book-open w-5 text-center"></i>服务中心</a>
+      <div class="h-px bg-[#e5e5ea] my-3"></div>
+      <button class="w-full btn btn-outline" id="loginBtn">登录 / 注册</button>
+    </div>
+  </aside>
+
+  <!-- Overlay & Publish -->
+  <div id="overlay" class="fixed inset-0 bg-black/40 hidden"></div>
+  <div id="publishSheet" class="fixed left-1/2 -translate-x-1/2 bottom-4 w-[92%] max-w-xl bg-white rounded-2xl shadow-2xl border p-6 hidden">
+    <div class="flex items-center justify-between mb-3"><h3 class="text-lg font-semibold">发布到 Unilink</h3><button id="closePublish" class="text-[#6e6e73]" aria-label="关闭"><i class="fas fa-times"></i></button></div>
+    <form id="publishForm" class="grid gap-4">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div><label class="block text-sm text-[#6e6e73] mb-1">类型</label><select name="type" class="w-full border rounded-xl px-3 py-2"><option value="errand">跑腿/代购</option><option value="market">二手转让</option><option value="task">悬赏任务</option></select></div>
+        <div><label class="block text-sm text-[#6e6e73] mb-1">预算/价格（¥）</label><input name="price" type="number" min="0" step="1" class="w-full border rounded-xl px-3 py-2" required /></div>
+      </div>
+      <div><label class="block text-sm text-[#6e6e73] mb-1">标题</label><input name="title" class="w-full border rounded-xl px-3 py-2" placeholder="例如：求帮忙取快递 / 出闲置 iPad" required /></div>
+      <div><label class="block text-sm text-[#6e6e73] mb-1">详细说明</label><textarea name="desc" rows="3" class="w-full border rounded-xl px-3 py-2" placeholder="补充时间、地点、规格等信息" required></textarea></div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div><label class="block text-sm text-[#6e6e73] mb-1">校区/城市</label><input name="campus" class="w-full border rounded-xl px-3 py-2" placeholder="如：嘉泉大学" /></div>
+        <div><label class="block text-sm text-[#6e6e73] mb-1">联系方式</label><input name="contact" class="w-full border rounded-xl px-3 py-2" placeholder="微信/手机号" required /></div>
+      </div>
+      <div class="flex items-center justify-between"><label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" name="urgent"/> 紧急</label><button class="btn btn-black" type="submit">发布</button></div>
+    </form>
+  </div>
+  <button id="fab" class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white text-xl shadow-xl flex items-center justify-center" aria-label="发布"><i class="fas fa-plus"></i></button>
+
+  <script>
+    // Toggle states
+    const overlay=document.getElementById('overlay');
+    const sheet=document.getElementById('publishSheet');
+    const openPublish=()=>{document.body.style.overflow='hidden';overlay.classList.remove('hidden');sheet.classList.remove('hidden');}
+    const closePublish=()=>{document.body.style.overflow='';overlay.classList.add('hidden');sheet.classList.add('hidden');}
+    document.getElementById('fab').addEventListener('click',openPublish);
+    document.getElementById('publishBtnTop').addEventListener('click',openPublish);
+    document.getElementById('publishBtnTrade').addEventListener('click',openPublish);
+    document.getElementById('closePublish').addEventListener('click',closePublish);
+    overlay.addEventListener('click',()=>{closePublish();toggleDrawer(false);});
+
+    // Drawer toggle
+    const avatarBtn=document.getElementById('avatarBtn');
+    const drawer=document.getElementById('userDrawer');
+    const closeDrawerBtn=document.getElementById('closeDrawerBtn');
+    const toggleDrawer=(open)=>{if(open){document.body.style.overflow='hidden';overlay.classList.remove('hidden');drawer.classList.add('active');}else{document.body.style.overflow='';overlay.classList.add('hidden');drawer.classList.remove('active');}}
+    avatarBtn.addEventListener('click',()=>toggleDrawer(true));
+    closeDrawerBtn.addEventListener('click',()=>toggleDrawer(false));
+
+    // API helpers
+    const USE_API = true;
+    const API_BASE = '/api';
+    async function api(path, method='GET', body) {
+      const res = await fetch(`${API_BASE}${path}`, {
+        method,
+        headers: { 'content-type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined
+      });
+      return res.json();
+    }
+    async function createPost(p){
+      if(!USE_API){
+        const list=JSON.parse(localStorage.getItem('unilink_posts')||'[]');
+        list.unshift({ id:Date.now(), ...p, status:'open' });
+        localStorage.setItem('unilink_posts', JSON.stringify(list));
+        return { ok:true };
+      }
+      return api('/posts','POST',p);
+    }
+    async function listPosts(country, offset=0, limit=20){
+      if(!USE_API){
+        let list=JSON.parse(localStorage.getItem('unilink_posts')||'[]');
+        if(country) list=list.filter(x=>x.country===country);
+        return { ok:true, data:list.slice(offset, offset+limit) };
+      }
+      const params = new URLSearchParams({ offset: String(offset), limit: String(limit) });
+      if(country) params.set('country', country);
+      return api(`/posts?${params.toString()}`);
+    }
+    async function markDone(id){
+      if(!USE_API){
+        const list=JSON.parse(localStorage.getItem('unilink_posts')||'[]');
+        const i=list.findIndex(x=>x.id===id); if(i>-1) list[i].status='done';
+        localStorage.setItem('unilink_posts', JSON.stringify(list));
+        return { ok:true };
+      }
+      return api('/posts','PATCH',{ id, status:'done' });
+    }
+    async function submitFeedback(row){
+      if(!USE_API){
+        const list=JSON.parse(localStorage.getItem('unilink_feedback')||'[]');
+        list.unshift({ id:Date.now(), ...row });
+        localStorage.setItem('unilink_feedback', JSON.stringify(list));
+        return { ok:true };
+      }
+      return api('/feedback','POST',row);
+    }
+    async function createReview(r){ return api('/reviews','POST',r); }
+    async function listReviews(params){ const q=new URLSearchParams(params||{}); return api(`/reviews?${q.toString()}`); }
+
+    // Publish form submit
+    document.getElementById('publishForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const post = {
+        type: form.type.value,
+        price: parseFloat(form.price.value || '0'),
+        title: form.title.value.trim(),
+        desc: form.desc.value.trim(),
+        campus: form.campus.value.trim(),
+        contact: form.contact.value.trim(),
+        country: form.country ? form.country.value : '',
+        urgent: form.urgent.checked
+      };
+      // Ensure title and contact exist
+      if(!post.title || !post.contact){ alert('标题和联系方式必填'); return; }
+      const res = await createPost(post);
+      if(res.ok){
+        alert('发布成功！');
+        // TODO: 这里可以刷新列表 e.g., refreshTradeList();
+        form.reset();
+      }else{
+        alert('发布失败：'+(res.error||'未知错误'));
+      }
+      closePublish();
+    });
+  </script>
+</body>
+</html>
