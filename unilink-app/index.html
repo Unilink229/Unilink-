@@ -9,6 +9,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 配置 Supabase 项目参数
+    window.SUPABASE_URL = window.SUPABASE_URL || '';
+    window.SUPABASE_ANON = window.SUPABASE_ANON || '';
+  </script>
   <style>
     :root{--ink:#1d1d1f;--sub:#6e6e73;--line:#d2d2d7;--bg:#ffffff;--bg-alt:#f5f5f7;--radius:20px;--ease:cubic-bezier(.2,.7,.2,1)}
     html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',Arial,sans-serif;scroll-behavior:smooth}
@@ -190,6 +197,7 @@
       <a href="#resources" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f7]"><i class="fa-solid fa-book-open w-5 text-center"></i>服务中心</a>
       <div class="h-px bg-[#e5e5ea] my-3"></div>
       <button class="w-full btn btn-outline" id="loginBtn">登录 / 注册</button>
+      <button class="w-full btn btn-outline hidden" id="logoutBtn">退出登录</button>
     </div>
   </aside>
 
@@ -210,6 +218,14 @@
       </div>
       <div class="flex items-center justify-between"><label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" name="urgent"/> 紧急</label><button class="btn btn-black" type="submit">发布</button></div>
     </form>
+  </div>
+  <!-- 登录弹窗 -->
+  <div id="loginModal" class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-sm bg-white rounded-2xl shadow-2xl border p-6 hidden z-[70]">
+    <div class="flex items-center justify-between mb-3"><h3 class="text-lg font-semibold">登录</h3><button id="closeLogin" class="text-[#6e6e73]" aria-label="关闭"><i class="fas fa-times"></i></button></div>
+    <div class="space-y-4">
+      <input id="loginEmail" type="email" class="w-full border rounded-xl px-3 py-2" placeholder="邮箱" />
+      <button id="sendLoginLink" class="btn btn-black w-full">发送登录链接</button>
+    </div>
   </div>
   <button id="fab" class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white text-xl shadow-xl flex items-center justify-center" aria-label="发布"><i class="fas fa-plus"></i></button>
 
@@ -310,6 +326,48 @@
       }
       closePublish();
     });
+
+    // ===== Supabase Auth =====
+    const supabase = window.supabase && window.SUPABASE_URL && window.SUPABASE_ANON
+      ? window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON)
+      : null;
+    const loginModal = document.getElementById('loginModal');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const closeLogin = document.getElementById('closeLogin');
+    const sendLoginLink = document.getElementById('sendLoginLink');
+    const loginEmail = document.getElementById('loginEmail');
+
+    loginBtn.addEventListener('click', () => { overlay.classList.remove('hidden'); loginModal.classList.remove('hidden'); });
+    closeLogin.addEventListener('click', () => { overlay.classList.add('hidden'); loginModal.classList.add('hidden'); });
+
+    sendLoginLink.addEventListener('click', async () => {
+      const email = loginEmail.value.trim();
+      if (!email) { alert('请输入邮箱'); return; }
+      if (!supabase) { alert('Supabase 未配置'); return; }
+      const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: location.href } });
+      if (error) { alert('发送失败：' + error.message); } else { alert('验证邮件已发送，请查收'); }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      if (supabase) { await supabase.auth.signOut(); }
+    });
+
+    if (supabase) {
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          loginModal.classList.add('hidden');
+          overlay.classList.add('hidden');
+          document.getElementById('userPanelTitle').textContent = session.user.email;
+          loginBtn.classList.add('hidden');
+          logoutBtn.classList.remove('hidden');
+        } else {
+          document.getElementById('userPanelTitle').textContent = '未登录用户';
+          loginBtn.classList.remove('hidden');
+          logoutBtn.classList.add('hidden');
+        }
+      });
+    }
   </script>
 </body>
 </html>
