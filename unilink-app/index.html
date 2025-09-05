@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Unilink｜留学生活 · 交易与社区</title>
+  <title>留学中｜留学生活 · 交易与社区</title>
+  <meta name="description" content="Unilink：留学生生活一站式平台。真实交易、社区交流、院校评价、常用服务。">
+  <meta name="keywords" content="Unilink, 留学生, 二手交易, 跑腿, 代购, 校园, 社区, 院校评价, 留学生活">
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Icons -->
@@ -28,7 +30,7 @@
     .hero-inner{position:relative;z-index:2;padding:120px 0;text-align:center;color:var(--ink)}
     .brand-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.04);backdrop-filter:saturate(160%) blur(6px);border:1px solid #e5e5ea;border-radius:14px;padding:8px 12px;color:var(--ink)}
     .brand-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--brand)}
-    .drawer{position:fixed;right:0;top:0;height:100vh;width:360px;max-width:92vw;background:#fff;border-left:1px solid var(--line);box-shadow:-20px 0 60px rgba(0,0,0,.12);transform:translateX(100%);transition:transform .3s var(--ease);z-index:70}
+    .drawer{position:fixed;right:0;top:0;height:100vh;width:360px;max-width:92vw;background:#fff;border-left:1px solid var(--line);box-shadow:-20px 0 60px rgba(0,0,0,.12);transform:translateX(100%);transition:transform .3s var(--ease);z-index:70;overflow-y:auto;-webkit-overflow-scrolling:touch}
     .drawer.active{transform:translateX(0)}
     .drawer header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line)}
     @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -52,7 +54,6 @@
     .page-content{padding:24px;overflow-y:auto;height:calc(100vh - 70px)}
     .help{font-size:12px;color:#6e6e73}
     .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid #e5e5ea;background:#fafafa;font-size:12px}
-  
     /* 聊天相关样式 */
     .chat-panel{position:fixed;right:16px;bottom:16px;z-index:90;width:min(420px,92vw);height:520px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 12px 40px rgba(0,0,0,.15);display:none;flex-direction:column}
     .chat-panel.active{display:flex}
@@ -65,7 +66,6 @@
     .chat-meta{font-size:11px;color:#6e6e73;margin-top:2px}
     .chat-input{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:#fff}
     .chat-input input{flex:1;border:1px solid var(--line);border-radius:999px;padding:10px 14px}
-    
     /* 聊天大厅样式 */
     .chat-lobby{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:16px}
     .chat-room-card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:all .2s var(--ease)}
@@ -82,14 +82,21 @@
     .chat-tab-bar{display:flex;border-bottom:1px solid var(--line);background:#fff}
     .chat-tab{flex:1;text-align:center;padding:12px;font-weight:600;color:var(--sub);transition:all .2s var(--ease);border-bottom:2px solid transparent}
     .chat-tab.active{color:var(--brand);border-bottom-color:var(--brand)}
-    
-    /* 新添加的样式 */
+    /* 悬浮聊天按钮 */
     .chat-toggle-btn{position:fixed;right:16px;bottom:80px;width:52px;height:52px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:80;transition:transform .2s var(--ease)}
     .chat-toggle-btn:hover{transform:scale(1.05)}
     .chat-indicator{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:#ff3b30;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center}
     .chat-action-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;background:var(--bg-alt);font-size:13px;font-weight:500;color:var(--ink);transition:all .2s var(--ease)}
     .chat-action-btn:hover{background:#e5e5ea}
-  </style>
+  
+    .cmt-images{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+    .cmt-images img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #e5e5ea}
+    .cmt-actions{display:flex;gap:10px;margin-top:6px}
+    .cmt-actions button{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid #d2d2d7}
+    .cmt-badge{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid #e5e5ea;background:#fafafa;font-size:12px}
+    .cmt-reported{opacity:.6;filter:grayscale(30%)}
+
+</style>
 </head>
 <body>
   <a href="#home" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 bg-[var(--brand)] text-white px-3 py-1 rounded z-[100]">跳到主要内容</a>
@@ -98,7 +105,7 @@
     <div class="container-apple py-3 flex items-center justify-between">
       <a href="#home" class="flex items-center gap-2" aria-label="Unilink 首页">
         <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[var(--brand)] text-white text-sm font-bold">U</span>
-        <b>Unilink</b>
+        <b>Unilink</b><span id="globalVerifyBadge" class="ml-2 badge" style="display:none"><i class="fa-solid fa-shield"></i><span>已认证</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-6 text-[15px]" aria-label="主导航">
         <a class="hover:opacity-70" href="#trade">交易</a>
@@ -166,7 +173,7 @@
             <button class="text-[14px] text-[#6e6e73] hover:text-black" id="clearMyPosts">清空</button>
           </div>
           <div id="tradeMyPosts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
-          <div id="tradeMyPostsEmpty" class="text-[#6e6e73]">暂无内容，点击上方"发布需求"试试～</div>
+          <div id="tradeMyPostsEmpty" class="text-[#6e6e73]">暂无内容，点击上方“发布需求”试试～</div>
         </div>
       </div>
     </section>
@@ -186,29 +193,7 @@
             </button>
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <article class="tile p-6 cursor-pointer" data-page="topic-exam">
-            <h4 class="font-semibold">期末高效复习法</h4>
-            <p class="sub mt-1">延世 · 计算机 · 120 评论</p>
-            <button class="chat-action-btn mt-3" data-open-topic-chat data-room="topic-exam" data-title="期末高效复习法">
-              <i class="fa-regular fa-comment-dots"></i> 加入讨论
-            </button>
-          </article>
-          <article class="tile p-6 cursor-pointer" data-page="topic-job">
-            <h4 class="font-semibold">校内兼职怎么找？</h4>
-            <p class="sub mt-1">高丽 · 商学院 · 78 评论</p>
-            <button class="chat-action-btn mt-3" data-open-topic-chat data-room="topic-job" data-title="校内兼职怎么找？">
-              <i class="fa-regular fa-comment-dots"></i> 加入讨论
-            </button>
-          </article>
-          <article class="tile p-6 cursor-pointer" data-page="topic-rent">
-            <h4 class="font-semibold">2025 租房避坑指南</h4>
-            <p class="sub mt-1">首尔 · 住房 · 233 评论</p>
-            <button class="chat-action-btn mt-3" data-open-topic-chat data-room="topic-rent" data-title="2025 租房避坑指南">
-              <i class="fa-regular fa-comment-dots"></i> 加入讨论
-            </button>
-          </article>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="communityCards"></div>
       </div>
     </section>
 
@@ -217,7 +202,7 @@
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
           <div>
             <div class="eyebrow">REVIEWS</div>
-            <h2 class="h2 mt-1">院校评价（Beta）</h2>
+            <h2 class="h2 mt-1">院校评价</h2>
             <p class="sub mt-1">按院校/专业/维度查看真实体验，可搜索与排序</p>
           </div>
           <div class="flex items-center gap-3">
@@ -233,11 +218,11 @@
             <thead class="bg-[#fafafa] border-b select-none">
               <tr>
                 <th scope="col" class="text-left py-3 px-4 cursor-pointer" data-sort="school">院校</th>
-                <th scope="col" class="text-left py-3 px-4 cursor-pointer" data-sort="major">专业</th>
-                <th scope="col" class="text-left py-3 px-4 cursor-pointer" data-sort="course">课程强度</th>
-                <th scope="col" class="text-left py-3 px-4 cursor-pointer" data-sort="life">生活便利</th>
-                <th scope="col" class="text-left py-3 px-4 cursor-pointer" data-sort="career">就业资源</th>
-                <th scope="col" class="text-left py-3 px-4 cursor-pointer" data-sort="score">总体评分</th>
+<th scope="col" class="text-left py-3 px-4">课程强度</th>
+<th scope="col" class="text-left py-3 px-4">生活便利</th>
+<th scope="col" class="text-left py-3 px-4">就业资源</th>
+<th scope="col" class="text-left py-3 px-4 cursor-pointer" data-sort="score">总体评分</th>
+<th scope="col" class="text-left py-3 px-4">详情</th>
               </tr>
             </thead>
             <tbody id="reviewsTbody" aria-live="polite"></tbody>
@@ -276,7 +261,7 @@
   </nav>
 
   <!-- 用户抽屉 -->
-  <aside id="userDrawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="userPanelTitle">
+  <aside id="userDrawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="userPanelTitle" style="padding-bottom:env(safe-area-inset-bottom);">
     <header class="px-5 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-full bg-[var(--brand)] text-white flex items-center justify-center">U</div>
@@ -314,10 +299,22 @@
       </div>
       <div id="memberExpire" style="font-size:12px;color:#6e6e73;margin-top:6px">到期时间：—</div>
       <div style="display:flex;gap:8px;margin-top:10px">
-        <button id="btnUpgradeVIP" class="btn btn-black" style="flex:1">开通 VIP（模拟）</button>
-        <button id="btnDowngrade" class="btn btn-outline" style="flex:1;display:none">取消 VIP（模拟）</button>
+        <button id="btnUpgradeVIP" class="btn btn-black" style="flex:1">开通 VIP</button>
+        <button id="btnDowngrade" class="btn btn-outline" style="flex:1;display:none">取消 VIP</button>
       </div>
     </div>
+  
+    <div class="tile p-4 border rounded-xl mx-5 mt-4">
+      <div class="font-semibold">认证状态</div>
+      <div id="verifyStatusText" class="text-sm text-[#6e6e73] mt-1">未认证</div>
+      <div id="verifyExpireText" class="text-sm text-[#6e6e73]">有效期：—</div>
+      <div class="flex gap-2 mt-3">
+        <button id="btnOpenVerify" class="btn btn-black flex-1">提交认证</button>
+        <button id="btnReverify" class="btn btn-outline flex-1" style="display:none">重新认证</button>
+      </div>
+      <div class="help mt-2">材料二选一：在读证明或录取通知书；填写入学年份和学制（年），系统自动计算账号有效期（毕业年 12 月 31 日）。</div>
+    </div>
+
   </aside>
 
   <!-- 遮罩与弹层 -->
@@ -338,13 +335,14 @@
               <option value="errand">跑腿/代购</option>
               <option value="market">二手转让</option>
               <option value="task">悬赏任务</option>
+              <option value="groupbuy">校园团购</option>
             </select>
             <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[#6e6e73] pointer-events-none"></i>
           </div>
         </div>
         <div>
           <label class="block text-sm text-[#6e6e73] mb-1">预算/价格（<span id="currencyUnit">$</span>）</label>
-          <input name="price" id="priceInput" type="number" min="0" step="1" class="w-full rounded-xl border border-[#d2d2d7] bg-white px-4 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-[var(--brand)]" required />
+          <input name="price" id="priceInput" type="number" min="0" step="1" class="w-full rounded-xl border border-[#d2d2d7] bg-white px-4 py-2.5 text-[15px]" required />
         </div>
         <div>
           <label class="block text-sm text-[#6e6e73] mb-1">国家/地区</label>
@@ -359,7 +357,7 @@
           <label class="block text-sm text-[#6e6e73] mb-1">院校（按国家联动）</label>
           <input name="school" id="schoolInput" list="schoolList" class="w-full rounded-xl border border-[#d2d2d7] bg-white px-4 py-2.5 text-[15px]" placeholder="选择或输入院校名" />
           <datalist id="schoolList"></datalist>
-          <div class="help mt-1">数据来自「中留学服」标准库（可扩展）。</div>
+          <div class="help mt-1">数据来自标准库，可逐步扩展。</div>
         </div>
         <div>
           <label class="block text-sm text-[#6e6e73] mb-1">校区/城市</label>
@@ -417,7 +415,7 @@
 
   <!-- 登录弹窗 -->
   <div id="authSheet" class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[92%] max-w-md bg-white rounded-2xl shadow-2xl border p-6 z-[90] hidden">
-    <div class="flex items-center justify-between mb-3"><h3 class="text-lg font-semibold">登录 / 注册</h3><button id="closeAuth" class="text-[#6e6e73]" aria-label="关闭"><i class="fas fa-times"></i></button></div>
+    <div class="flex items-center justify之间 mb-3"><h3 class="text-lg font-semibold">登录 / 注册</h3><button id="closeAuth" class="text-[#6e6e73]" aria-label="关闭"><i class="fas fa-times"></i></button></div>
     <div class="space-y-4">
       <div>
         <div class="text-sm text-[#6e6e73] mb-2">选择用户类型</div>
@@ -438,13 +436,86 @@
         <button id="doLogin" class="btn btn-black flex-1">确认登录</button>
         <button id="doLogout" class="btn btn-outline flex-1 hidden">退出</button>
       </div>
-      <div class="text-[13px] text-[#6e6e73]">说明：留学生需填写邮箱 + 微信进行验证；其他用户仅需填写微信。若已配置 Supabase，将向邮箱发送登录链接进行校验。</div>
+      <div class="text-[13px] text-[#6e6e73]">留学生需填写邮箱 + 微信进行验证；其他用户仅需填写微信。</div>
     </div>
   </div>
 
+
+  <!-- 认证弹窗 -->
+  <div id="verifySheet" class="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[92%] max-w-xl bg-white rounded-2xl shadow-2xl border p-6 z-[95] hidden">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-semibold">留学生认证</h3>
+      <button id="closeVerify" class="text-[#6e6e73]" aria-label="关闭"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="verifyForm" class="grid gap-4">
+      <div>
+        <label class="block text-sm text-[#6e6e73] mb-1">材料类型</label>
+        <div class="grid grid-cols-2 gap-2">
+          <label class="border rounded-lg p-3 cursor-pointer flex items-center gap-2">
+            <input type="radio" name="docType" value="enroll" checked />
+            <span>在读证明</span>
+          </label>
+          <label class="border rounded-lg p-3 cursor-pointer flex items-center gap-2">
+            <input type="radio" name="docType" value="offer" />
+            <span>录取通知书</span>
+          </label>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm text-[#6e6e73] mb-1">上传文件（JPG/PNG/PDF，≤5MB）</label>
+        <input id="verifyFile" type="file" accept=".jpg,.jpeg,.png,.pdf" class="w-full" required />
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-[#6e6e73] mb-1">入学年份</label>
+          <select id="enrollYear" class="w-full rounded-xl border border-[#d2d2d7] bg-white px-4 py-2.5 text-[15px]"></select>
+        </div>
+        <div>
+          <label class="block text-sm text-[#6e6e73] mb-1">学制（年）</label>
+          <select id="programYears" class="w-full rounded-xl border border-[#d2d2d7] bg-white px-4 py-2.5 text-[15px]">
+            <option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
+          </select>
+        </div>
+      </div>
+      <div class="help">账号有效期将自动计算为 <span id="calcExpire">—</span>（毕业年度 12 月 31 日）。</div>
+      <div class="flex items-center justify-between">
+        <div class="help">提交后进入人工审核（当前前端先生效，接后台后改为待审核）。</div>
+        <button class="btn btn-black" type="submit">提交认证</button>
+      </div>
+    </form>
+  </div>
+
+
+
+  <!-- 院校详情页（动态渲染） -->
+  <section id="page-school-detail" class="page" role="dialog" aria-modal="true" aria-labelledby="schoolDetailTitle">
+    <div class="page-header">
+      <button class="btn btn-outline" data-back><i class="fas fa-arrow-left"></i></button>
+      <h3 class="h2" id="schoolDetailTitle">院校详情</h3>
+    </div>
+    <div class="page-content">
+      <div id="schoolSummary" class="tile p-4 mb-4"></div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="tile p-4">
+          <div class="font-semibold mb-2">专业列表</div>
+          <div id="schoolMajors"></div>
+        </div>
+        <div class="tile p-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-semibold">学生评分与评论</div>
+            <div id="schoolAvgScore" class="text-sm text-[#6e6e73]"></div>
+          </div>
+          <div id="schoolReviewsList" class="space-y-3"></div>
+          <div id="schoolReviewFormWrap" class="mt-4"></div>
+<div id="reportModal" class="fixed inset-0 bg-black/40 hidden z-[120]"><div class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl border p-6 w-[92%] max-w-md"><div class="font-semibold mb-2">举报评论</div><div class="text-sm text-[#6e6e73] mb-3">请选择或填写举报原因</div><select id="reportReason" class="w-full border rounded px-3 py-2 mb-2"><option value="广告/推广">广告/推广</option><option value="不友善/攻击">不友善/攻击</option><option value="不实信息">不实信息</option><option value="低质/灌水">低质/灌水</option><option value="其他">其他</option></select><textarea id="reportExtra" rows="2" class="w-full border rounded px-3 py-2" placeholder="补充说明（可选）"></textarea><div class="flex gap-2 mt-3"><button id="reportSubmit" class="btn btn-black flex-1">提交举报</button><button id="reportCancel" class="btn btn-outline flex-1">取消</button></div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
   <!-- 路由页面 -->
   <div id="pageRouter">
-    <!-- 原有页面保持不变 -->
     <section id="page-taskhall" class="page">
       <div class="page-header">
         <button class="btn btn-outline" data-back><i class="fas fa-arrow-left"></i></button>
@@ -465,23 +536,168 @@
       </div>
     </section>
 
-    <section id="page-errands" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">跑腿代购</h3><button class="btn btn-outline" data-back>返回</button></div><div id="errandsList" class="grid gap-4"></div></div></section>
-    <section id="page-market" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">二手市场</h3><button class="btn btn-outline" data-back>返回</button></div><div id="marketList" class="grid gap-4"></div></div></section>
-    <section id="page-groupbuy" class="page"><div class="container-apple py-6"><div class="flex items-center justify之间 mb-4"><h3 class="h2">校园团购</h3><button class="btn btn-outline" data-back>返回</button></div><div id="groupbuyList" class="grid gap-4"></div></div></section>
+    <section id="page-errands" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">跑腿代购</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="errandsList" class="grid gap-4"></div>
+      </div>
+    </section>
 
-    <section id="page-community-home" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">社区首页</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）将接入话题流与发帖。</p></div></section>
-    <section id="page-topic-exam" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">话题：期末高效复习法</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）话题详情。</p></div></section>
-    <section id="page-topic-job" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">话题：校内兼职怎么找？</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）话题详情。</p></div></section>
-    <section id="page-topic-rent" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">话题：2025 租房避坑指南</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）话题详情。</p></div></section>
+    <section id="page-market" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">二手市场</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="marketList" class="grid gap-4"></div>
+      </div>
+    </section>
 
-    <section id="page-reviews-all" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">全部院校</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）院校列表搜索页。</p></div></section>
-    <section id="page-svc-campus" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">学生证/校车</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）校务服务。</p></div></section>
-    <section id="page-svc-visa" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">签证/居留</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）签证服务。</p></div></section>
-    <section id="page-svc-housing" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">住宿/租房</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）住宿服务。</p></div></section>
-    <section id="page-svc-jobs" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">兼职/实习</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）就业服务。</p></div></section>
-    <section id="page-membership" class="page"><div class="container-apple py-6"><div class="flex items-center justify-between mb-4"><h3 class="h2">会员中心</h3><button class="btn btn-outline" data-back>返回</button></div><p class="sub">（预留）会员服务。</p></div></section>
+    <section id="page-groupbuy" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">校园团购</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="groupbuyList" class="grid gap-4"></div>
+      </div>
+    </section>
 
-    <!-- 新增聊天大厅页面 -->
+    <section id="page-community-home" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">社区首页</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="tile p-4">
+            <div class="font-semibold mb-2">最新话题</div>
+            <div id="topicList"></div>
+          </div>
+          <div class="tile p-4">
+            <div class="font-semibold mb-2">发帖（本地）</div>
+            <form id="topicForm" class="grid gap-2">
+              <input id="topicTitle" class="border rounded px-3 py-2" placeholder="标题（如：期末高效复习法）" required/>
+              <textarea id="topicBody" rows="3" class="border rounded px-3 py-2" placeholder="内容..." required></textarea>
+              <button class="btn btn-black" type="submit">发布话题</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-topic-exam" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">话题：期末高效复习法</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="topic-exam-body" class="prose"></div>
+      </div>
+    </section>
+
+    <section id="page-topic-job" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">话题：校内兼职怎么找？</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="topic-job-body" class="prose"></div>
+      </div>
+    </section>
+
+    <section id="page-topic-rent" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">话题：2025 租房避坑指南</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="topic-rent-body" class="prose"></div>
+      </div>
+    </section>
+
+    <section id="page-reviews-all" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">全部院校</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="reviewsAll" class="grid md:grid-cols-2 gap-4"></div>
+      </div>
+    </section>
+
+    <section id="page-svc-campus" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">学生证/校车</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div class="tile p-4">
+          <div class="font-semibold mb-2">常用入口</div>
+          <ul class="list-disc pl-6 text-[15px] space-y-2">
+            <li><a class="text-blue-600 underline" href="https://www.gachon.ac.kr/" target="_blank" rel="noopener">嘉泉大学校务系统</a></li>
+            <li><a class="text-blue-600 underline" href="https://www.seoulbus.co.kr/" target="_blank" rel="noopener">首尔巴士实时查询</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-svc-visa" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">签证/居留</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div class="tile p-4">
+          <div class="font-semibold mb-2">官方链接</div>
+          <ul class="list-disc pl-6 text-[15px] space-y-2">
+            <li><a class="text-blue-600 underline" href="https://www.hikorea.go.kr/" target="_blank" rel="noopener">HiKorea 出入境</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-svc-housing" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">住宿/租房</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="housingList" class="grid gap-4"></div>
+      </div>
+    </section>
+
+    <section id="page-svc-jobs" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">兼职/实习</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div id="jobsList" class="grid gap-4"></div>
+      </div>
+    </section>
+
+    <section id="page-membership" class="page">
+      <div class="container-apple py-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="h2">会员中心</h3>
+          <button class="btn btn-outline" data-back>返回</button>
+        </div>
+        <div class="tile p-4">
+          <div class="font-semibold">权益</div>
+          <ul class="list-disc pl-6 text-[15px] space-y-1">
+            <li>发布置顶优先展示</li>
+            <li>紧急任务优先同步到微信社区</li>
+            <li>专属客服与活动优先报名</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 聊天大厅页面 -->
     <section id="page-trade-chat-lobby" class="page">
       <div class="page-header">
         <button class="btn btn-outline" data-back><i class="fas fa-arrow-left"></i></button>
@@ -493,70 +709,7 @@
           <div class="chat-tab" data-tab="trade-recent">最近聊天</div>
           <div class="chat-tab" data-tab="trade-groups">群组</div>
         </div>
-        <div class="chat-lobby">
-          <!-- 示例聊天室卡片 -->
-          <div class="chat-room-card">
-            <div class="chat-room-header">
-              <div class="chat-room-avatar">U</div>
-              <div class="chat-room-title">二手 iPad 交易</div>
-              <span class="chat-room-badge">3</span>
-            </div>
-            <div class="chat-room-body">
-              <div class="chat-room-desc">求购 iPad Pro 11寸 2021款，预算 60万韩元</div>
-              <div class="chat-room-meta">
-                <span><i class="fa-regular fa-user"></i> 李同学</span>
-                <span><i class="fa-regular fa-clock"></i> 2分钟前</span>
-              </div>
-            </div>
-            <div class="chat-room-footer">
-              <button class="chat-action-btn" data-open-chat-detail data-room="trade-ipad" data-title="二手 iPad 交易">
-                <i class="fa-regular fa-comment"></i> 加入聊天
-              </button>
-              <span class="text-[#6e6e73] text-sm">在线: 2人</span>
-            </div>
-          </div>
-          
-          <div class="chat-room-card">
-            <div class="chat-room-header">
-              <div class="chat-room-avatar">U</div>
-              <div class="chat-room-title">代取快递</div>
-            </div>
-            <div class="chat-room-body">
-              <div class="chat-room-desc">周三下午3点，高丽大学正门快递点</div>
-              <div class="chat-room-meta">
-                <span><i class="fa-regular fa-user"></i> 张同学</span>
-                <span><i class="fa-regular fa-clock"></i> 15分钟前</span>
-              </div>
-            </div>
-            <div class="chat-room-footer">
-              <button class="chat-action-btn" data-open-chat-detail data-room="trade-delivery" data-title="代取快递">
-                <i class="fa-regular fa-comment"></i> 加入聊天
-              </button>
-              <span class="text-[#6e6e73] text-sm">在线: 1人</span>
-            </div>
-          </div>
-          
-          <div class="chat-room-card">
-            <div class="chat-room-header">
-              <div class="chat-room-avatar">U</div>
-              <div class="chat-room-title">教材转卖</div>
-              <span class="chat-room-badge">1</span>
-            </div>
-            <div class="chat-room-body">
-              <div class="chat-room-desc">计算机专业教材，几乎全新，半价出售</div>
-              <div class="chat-room-meta">
-                <span><i class="fa-regular fa-user"></i> 金同学</span>
-                <span><i class="fa-regular fa-clock"></i> 1小时前</span>
-              </div>
-            </div>
-            <div class="chat-room-footer">
-              <button class="chat-action-btn" data-open-chat-detail data-room="trade-books" data-title="教材转卖">
-                <i class="fa-regular fa-comment"></i> 加入聊天
-              </button>
-              <span class="text-[#6e6e73] text-sm">在线: 3人</span>
-            </div>
-          </div>
-        </div>
+        <div class="chat-lobby" id="tradeLobby"></div>
       </div>
     </section>
     
@@ -571,90 +724,7 @@
           <div class="chat-tab" data-tab="community-study">学习交流</div>
           <div class="chat-tab" data-tab="community-life">生活互助</div>
         </div>
-        <div class="chat-lobby">
-          <!-- 示例社区聊天室 -->
-          <div class="chat-room-card">
-            <div class="chat-room-header">
-              <div class="chat-room-avatar">U</div>
-              <div class="chat-room-title">期末高效复习法</div>
-              <span class="chat-room-badge">12</span>
-            </div>
-            <div class="chat-room-body">
-              <div class="chat-room-desc">分享各科高效复习方法，互助备考</div>
-              <div class="chat-room-meta">
-                <span><i class="fa-regular fa-user"></i> 延世·计算机</span>
-                <span><i class="fa-regular fa-comment"></i> 120条讨论</span>
-              </div>
-            </div>
-            <div class="chat-room-footer">
-              <button class="chat-action-btn" data-open-topic-chat data-room="topic-exam" data-title="期末高效复习法">
-                <i class="fa-regular fa-comment"></i> 加入讨论
-              </button>
-              <span class="text-[#6e6e73] text-sm">在线: 24人</span>
-            </div>
-          </div>
-          
-          <div class="chat-room-card">
-            <div class="chat-room-header">
-              <div class="chat-room-avatar">U</div>
-              <div class="chat-room-title">校内兼职怎么找？</div>
-            </div>
-            <div class="chat-room-body">
-              <div class="chat-room-desc">分享校内兼职信息，避坑指南</div>
-              <div class="chat-room-meta">
-                <span><i class="fa-regular fa-user"></i> 高丽·商学院</span>
-                <span><i class="fa-regular fa-comment"></i> 78条讨论</span>
-              </div>
-            </div>
-            <div class="chat-room-footer">
-              <button class="chat-action-btn" data-open-topic-chat data-room="topic-job" data-title="校内兼职怎么找？">
-                <i class="fa-regular fa-comment"></i> 加入讨论
-              </button>
-              <span class="text-[#6e6e73] text-sm">在线: 15人</span>
-            </div>
-          </div>
-          
-          <div class="chat-room-card">
-            <div class="chat-room-header">
-              <div class="chat-room-avatar">U</div>
-              <div class="chat-room-title">2025 租房避坑指南</div>
-              <span class="chat-room-badge">5</span>
-            </div>
-            <div class="chat-room-body">
-              <div class="chat-room-desc">分享租房经验，避免踩坑</div>
-              <div class="chat-room-meta">
-                <span><i class="fa-regular fa-user"></i> 首尔·住房</span>
-                <span><i class="fa-regular fa-comment"></i> 233条讨论</span>
-              </div>
-            </div>
-            <div class="chat-room-footer">
-              <button class="chat-action-btn" data-open-topic-chat data-room="topic-rent" data-title="2025 租房避坑指南">
-                <i class="fa-regular fa-comment"></i> 加入讨论
-              </button>
-              <span class="text-[#6e6e73] text-sm">在线: 42人</span>
-            </div>
-          </div>
-          
-          <div class="chat-room-card">
-            <div class="chat-room-header">
-              <div class="chat-room-avatar">U</div>
-              <div class="chat-room-title">韩语学习交流</div>
-            </div>
-            <div class="chat-room-body">
-              <div class="chat-room-desc">一起学习韩语，分享学习资源</div>
-              <div class="chat-room-meta">
-                <span><i class="fa-regular fa-user"></i> 语言学习</span>
-                <span><i class="fa-regular fa-comment"></i> 89条讨论</span>
-              </div>
-            </div>
-            <div class="chat-room-footer">
-              <button class="chat-action-btn" data-open-topic-chat data-room="topic-korean" data-title="韩语学习交流">
-                <i class="fa-regular fa-comment"></i> 加入讨论
-              </button>
-              <span class="text-[#6e6e73] text-sm">在线: 18人</span>
-            </div>
-          </div>
-        </div>
+        <div class="chat-lobby" id="communityLobby"></div>
       </div>
     </section>
   </div>
@@ -682,138 +752,283 @@
   </button>
 
   <script>
-    /* 可选：填入 Supabase 启用邮箱验证
-    window.SUPABASE_URL  = '';
-    window.SUPABASE_ANON = '';
-    */
-
+    // ====== CONFIG ======
     const $$ = s => Array.from(document.querySelectorAll(s));
     const $  = s => document.querySelector(s);
 
-    // ===== 国家 & 院校（可由后端返回覆盖） =====
-    const COUNTRIES = ['韩国','美国','英国','日本','澳大利亚','加拿大','德国','法国','荷兰','意大利','西班牙','瑞士','瑞典','新加坡','马来西亚','泰国','俄罗斯','新西兰','爱尔兰','丹麦','挪威','芬兰','比利时','奥地利','葡萄牙','中国香港','中国澳门','中国台湾','以色列','阿联酋','卡塔尔','沙特','印度','印尼','越南','菲律宾','土耳其','希腊','匈牙利','波兰','捷克','斯洛伐克','罗马尼亚','保加利亚'];
-    const SCHOOLS_BY_COUNTRY = { '韩国':['嘉泉大学','延世大学','高丽大学','首尔大学','汉阳大学','成均馆大学','梨花女子大学','庆熙大学','又石大学','西江大学','中央大学','弘益大学'], '美国':['Harvard University','MIT','Stanford University','UC Berkeley','UCLA','Columbia University','NYU','Carnegie Mellon University','University of Chicago'] };
-    // 修正部分国家/地区的货币映射键名格式
-    // 注意：原代码中 "意大利:'€'" 少了一个单引号，导致语法错误。下面修复为 '意大利':'€' 这种形式。
-    const currencyByCountry = {
-      '韩国': '₩',
-      '美国': '$',
-      '英国': '£',
-      '日本': '¥',
-      '澳大利亚': 'A$',
-      '加拿大': 'C$',
-      '德国': '€',
-      '法国': '€',
-      '荷兰': '€',
-      '意大利': '€',
-      '西班牙': '€',
-      '瑞士': 'CHF',
-      '瑞典': 'kr',
-      '新加坡': 'S$',
-      '马来西亚': 'RM',
-      '泰国': '฿',
-      '俄罗斯': '₽',
-      '新西兰': 'NZ$',
-      '爱尔兰': '€',
-      '丹麦': 'kr',
-      '挪威': 'kr',
-      '芬兰': '€',
-      '比利时': '€',
-      '奥地利': '€',
-      '葡萄牙': '€',
-      '中国香港': 'HK$',
-      '中国澳门': 'MOP$',
-      '中国台湾': 'NT$'
+    // 线上标识
+    const PRODUCTION = true;
+    let SYNC_TIME_LABEL = '本地约19:00–21:00';
+
+    // ===== 国家/院校/货币 =====
+    // ===== 区域同步时间推荐（不打扰版） =====
+    function suggestSyncTimeByZone(tz){
+      // Map rough regions to a friendly local time
+      // default window 19:00–21:00
+      const win = '本地约19:00–21:00';
+      if(!tz) return win;
+      tz = (tz||'').toLowerCase();
+      if(tz.includes('seoul') || tz.includes('tokyo')) return '20:00（本地）';
+      if(tz.includes('shanghai') || tz.includes('hong_kong') || tz.includes('taipei')) return '21:00（本地）';
+      if(tz.includes('singapore') || tz.includes('kuala_lumpur') || tz.includes('bangkok') || tz.includes('jakarta')) return '20:00（本地）';
+      if(tz.includes('london') || tz.includes('berlin') || tz.includes('paris') || tz.includes('madrid') || tz.includes('rome') || tz.includes('amsterdam')) return '19:00（本地）';
+      if(tz.includes('new_york') || tz.includes('chicago') || tz.includes('toronto') || tz.includes('vancouver') || tz.includes('los_angeles') || tz.includes('denver')) return '20:00（本地）';
+      if(tz.includes('sydney') || tz.includes('melbourne') || tz.includes('auckland')) return '19:30（本地）';
+      return win;
+    }
+    function regionFromCountry(country){
+      if(!country) return null;
+      const asiaKRJP = ['韩国','日本'];
+      const chinaZH = ['中国大陆','中国香港','中国澳门','中国台湾'];
+      const sea = ['新加坡','马来西亚','泰国','越南','印度尼西亚','菲律宾','柬埔寨','老挝','缅甸','文莱'];
+      const eu = ['英国','法国','德国','荷兰','意大利','西班牙','瑞士','瑞典','丹麦','挪威','芬兰','比利时','奥地利','葡萄牙','爱尔兰'];
+      const na = ['美国','加拿大'];
+      const oc = ['澳大利亚','新西兰'];
+      if(asiaKRJP.includes(country)) return '20:00（本地）';
+      if(chinaZH.includes(country)) return '21:00（本地）';
+      if(sea.includes(country)) return '20:00（本地）';
+      if(eu.includes(country)) return '19:00（本地）';
+      if(na.includes(country)) return '20:00（本地）';
+      if(oc.includes(country)) return '19:30（本地）';
+      return '本地约19:00–21:00';
+    }
+    function refreshSyncLabel(){
+      // priority: selected country in the publish form -> browser timezone
+      const countrySel = document.getElementById('countrySelect');
+      let label = null;
+      if(countrySel && countrySel.value){
+        label = regionFromCountry(countrySel.value);
+      } else {
+        try{
+          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          label = suggestSyncTimeByZone(tz);
+        }catch{ label = '本地约19:00–21:00'; }
+      }
+      SYNC_TIME_LABEL = label || '本地约19:00–21:00';
+      const el = document.getElementById('syncTimeLbl');
+      if(el) el.textContent = SYNC_TIME_LABEL;
+    }
+
+    const COUNTRIES = ['韩国','美国','英国','日本','澳大利亚','加拿大','德国','法国','荷兰','意大利','西班牙','瑞士','瑞典','新加坡','马来西亚','泰国','俄罗斯','新西兰','爱尔兰','丹麦','挪威','芬兰','比利时','奥地利','葡萄牙','中国香港','中国澳门','中国台湾'];
+    const SCHOOLS_BY_COUNTRY = {
+      '韩国':['嘉泉大学','延世大学','高丽大学','首尔大学','汉阳大学','成均馆大学','梨花女子大学','庆熙大学','又石大学','西江大学','中央大学','弘益大学'],
+      '美国':['Harvard University','MIT','Stanford University','UC Berkeley','UCLA','Columbia University','NYU','Carnegie Mellon University','University of Chicago']
     };
-    const SYNC_TIME_LABEL = '20:00（首尔）';
+    const currencyByCountry = {
+      '韩国': '₩','美国': '$','英国': '£','日本': '¥','澳大利亚': 'A$','加拿大': 'C$','德国': '€','法国': '€','荷兰': '€','意大利': '€','西班牙': '€','瑞士': 'CHF','瑞典': 'kr','新加坡': 'S$','马来西亚': 'RM','泰国': '฿','俄罗斯': '₽','新西兰': 'NZ$','爱尔兰': '€','丹麦': 'kr','挪威': 'kr','芬兰': '€','比利时': '€','奥地利': '€','葡萄牙': '€','中国香港': 'HK$','中国澳门': 'MOP$','中国台湾': 'NT$'
+    };
 
-    // ===== 初始化下拉 / 货币联动 =====
-    function fillCountrySelect(el){ if(!el) return; el.innerHTML = '<option value="">全部国家/地区</option>' + COUNTRIES.map(c=>`<option value="${c}">${c}</option>`).join(''); }
-    fillCountrySelect($('#taskCountryFilter'));
-    $('#countrySelect').innerHTML = COUNTRIES.map(c=>`<option value="${c}">${c}</option>`).join('');
-    function refreshSchoolList(country){ const dl=$('#schoolList'); const arr=SCHOOLS_BY_COUNTRY[country]||[]; dl.innerHTML=arr.map(n=>`<option value="${n}"></option>`).join(''); }
-    function syncCurrency(){ const country=$('#countrySelect').value; $('#currencyUnit').textContent = currencyByCountry[country] || '$'; refreshSchoolList(country); }
-    $('#countrySelect')?.addEventListener('change', syncCurrency); syncCurrency();
+    // ===== 工具：本地存储封装 =====
+    const LS = {
+      get: (k, def=null) => { try{ const v = JSON.parse(localStorage.getItem(k)); return v==null? def : v; } catch { return def; } },
+      set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+      remove: (k) => localStorage.removeItem(k)
+    };
 
-    // 图片懒加载
-    document.querySelectorAll('img').forEach(img=>{img.loading=img.loading||'lazy'; img.decoding=img.decoding||'async'});
+    // ====== 用户与会员 ======
+    // ===== 认证（强） =====
+    function isVerifiedStrong(u){
+      if(!u || !u.verification) return false;
+      const { level, expires_at } = u.verification;
+      return level === 'strong' && (!expires_at || new Date(expires_at) >= new Date());
+    }
+    function computeExpire(year, years){
+      const y = Number(year) + Number(years);
+      return new Date(Date.UTC(y, 11, 31, 15, 59, 59)).toISOString(); // 毕业年 12/31，按KST折算UTC
+    }
+    function yearsOptions(){
+      const now = new Date(); const thisYear = now.getFullYear();
+      const from = thisYear - 10, to = thisYear + 2;
+      const el = document.getElementById('enrollYear'); if(!el) return;
+      el.innerHTML = Array.from({length: to-from+1}, (_,i)=>from+i).map(y=>`<option ${y===thisYear?'selected':''}>${y}</option>`).join('');
+    }
 
-    // Mobile tab active
-    function setActiveTab(){const hash=location.hash||'#home'; $$('#mobileTabs a').forEach(a=>{const on=(a.getAttribute('href')===hash)||a.hasAttribute('data-page')&&(`#page-${a.getAttribute('data-page')}`===hash); a.classList.toggle('text-black',on); a.classList.toggle('font-semibold',on);});}
-    window.addEventListener('hashchange',setActiveTab); setActiveTab();
-
-    // 弹层开关
-    const overlay=$('#overlay');
-    const sheet=$('#publishSheet');
-    const openPublish=()=>{document.body.style.overflow='hidden';overlay.classList.remove('hidden');sheet.classList.remove('hidden');}
-    const closePublish=()=>{sheet.classList.add('hidden');overlay.classList.add('hidden');document.body.style.overflow='';}
-    $('#fab')?.addEventListener('click',openPublish);
-    $('#publishBtnTop')?.addEventListener('click',openPublish);
-    $('#publishBtnTrade')?.addEventListener('click',openPublish);
-    $('#closePublish')?.addEventListener('click',closePublish);
-
-    // 用户抽屉
-    const drawer=$('#userDrawer');
-    $('#avatarBtn')?.addEventListener('click',()=>{overlay.classList.remove('hidden');drawer.classList.add('active');});
-    $('#closeDrawerBtn')?.addEventListener('click',()=>{overlay.classList.add('hidden');drawer.classList.remove('active');});
-    overlay?.addEventListener('click',()=>{
-      if(drawer.classList.contains('active')) { overlay.classList.add('hidden'); drawer.classList.remove('active'); return; }
-      if(!$('#postDetail').classList.contains('hidden')){ closePostDetail(); overlay.classList.add('hidden'); return; }
-      closePublish();
-    });
-
-    // 登录逻辑（可接Supabase）
-    let supabase=null; if(window.SUPABASE_URL && window.SUPABASE_ANON && window.supabase){ supabase=window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON); }
-    const state={ user: JSON.parse(localStorage.getItem('unilink_user')||'null') };
-    function lsSet(k,v){localStorage.setItem(k, JSON.stringify(v));}
-    function ensureMembership(){ if(!state.user) return; if(!state.user.membership){ state.user.membership={ level:'free', expires_at:null }; lsSet('unilink_user', state.user); } }
-
-    function renderUser(){
+    const state = { user: LS.get('unilink_user', null) };
+    function ensureMembership(){
+      if(!state.user) return;
+      if(!state.user.membership){ state.user.membership = { level:'free', expires_at:null }; LS.set('unilink_user', state.user); }
+    }
+    
+function renderUser(){
       const title=$('#userPanelTitle'), loginBtn=$('#loginBtn'), logoutBtn=$('#logoutBtn'), doLogoutBtn=$('#doLogout');
       const vipBadge=$('#userVipBadge'), vipText=$('#vipText');
+      const vText=$('#verifyStatusText'), vExpire=$('#verifyExpireText'), reBtn=$('#btnReverify'), gBadge=$('#globalVerifyBadge');
       if(state.user){
         ensureMembership();
         const isVip = state.user.membership?.level==='vip' && (!state.user.membership.expires_at || new Date(state.user.membership.expires_at)>new Date());
         title.textContent=`${state.user.wechat||state.user.email}（${state.user.type==='student'?'留学生用户':'其他用户'}）`;
         loginBtn?.classList.add('hidden'); logoutBtn?.classList.remove('hidden'); doLogoutBtn?.classList?.remove('hidden');
-        if(isVip){ vipBadge?.classList.remove('hidden'); vipText.textContent = 'VIP · '+ (state.user.membership.expires_at? ('有效期至 '+ new Date(state.user.membership.expires_at).toLocaleDateString()):'永久'); }
+        if(isVip){ vipBadge?.classList.remove('hidden'); vipText.textContent = 'VIP ' + (state.user.membership.expires_at? ('· 有效期至 '+ new Date(state.user.membership.expires_at).toLocaleDateString()):''); }
         else { vipBadge?.classList.add('hidden'); }
+
+        // verification
+        const ok = isVerifiedStrong(state.user);
+        if(gBadge) gBadge.style.display = ok?'inline-flex':'none';
+        if(vText && vExpire){
+          if(state.user.verification){
+            const { enroll_year, program_years, expires_at } = state.user.verification;
+            const expired = expires_at && new Date(expires_at) < new Date();
+            vText.textContent = ok ? '已认证（强）' : (expired ? '已过期' : '审核中');
+            vExpire.textContent = '有效期：' + (expires_at? new Date(expires_at).toLocaleDateString() : '—') + (enroll_year? `（${enroll_year} 入学 / ${program_years}年制）` : '');
+            if(reBtn) reBtn.style.display = 'inline-flex';
+          }else{
+            vText.textContent = '未认证';
+            vExpire.textContent = '有效期：—';
+            if(reBtn) reBtn.style.display = 'none';
+          }
+        }
       }else{
         title.textContent='未登录用户';
         loginBtn?.classList.remove('hidden'); logoutBtn?.classList.add('hidden'); doLogoutBtn?.classList?.add('hidden');
         vipBadge?.classList.add('hidden');
+        if(gBadge) gBadge.style.display='none';
+        if(vText){ vText.textContent='未认证'; if(vExpire) vExpire.textContent='有效期：—'; if(reBtn) reBtn.style.display='none'; }
       }
       renderMembership();
+      renderMyPosts();
+    }function renderMembership(){
+      const lvl = state.user?.membership?.level || 'free';
+      $('#memberLevelText').textContent = (lvl==='vip'?'VIP（会员）':'Free（普通用户）');
+      $('#memberBadge').style.display = (lvl==='vip'?'inline-flex':'none');
+      $('#memberExpire').textContent = '到期时间：' + (state.user?.membership?.expires_at ? new Date(state.user.membership.expires_at).toLocaleString() : '—');
+      $('#btnUpgradeVIP').style.display = (lvl==='vip'?'none':'inline-flex');
+      $('#btnDowngrade').style.display  = (lvl==='vip'?'inline-flex':'none');
     }
+    function upgradeVip(){
+      if(!state.user){ alert('请先登录'); return; }
+      const expires = new Date(); expires.setMonth(expires.getMonth()+1);
+      state.user.membership = { level:'vip', expires_at: expires.toISOString() };
+      LS.set('unilink_user', state.user); renderUser(); alert('VIP 开通成功！');
+    }
+    function downgradeVip(){
+      if(!state.user){ return; }
+      state.user.membership = { level:'free', expires_at: null };
+      LS.set('unilink_user', state.user); renderUser(); alert('已取消 VIP');
+    }
+    function openAuth(){ $('#overlay').classList.remove('hidden'); $('#authSheet').classList.remove('hidden'); syncAuthFields(); }
+    function closeAuth(){ $('#authSheet').classList.add('hidden'); $('#overlay').classList.add('hidden'); }
     function syncAuthFields(){ $('#authEmailWrap').classList.toggle('hidden', !$('#ut_student').checked); }
-    $$('#segUserType input').forEach(r=> r.addEventListener('change', syncAuthFields)); syncAuthFields();
-    const openAuth=()=>{ overlay.classList.remove('hidden'); $('#authSheet').classList.remove('hidden'); syncAuthFields(); }
-    const closeAuth=()=>{ $('#authSheet').classList.add('hidden'); overlay.classList.add('hidden'); }
-    $('#loginBtn')?.addEventListener('click', openAuth);
-    $('#closeAuth')?.addEventListener('click', closeAuth);
+    $$('#segUserType input').forEach(r=> r.addEventListener('change', syncAuthFields));
 
-    async function signIn(){
+    function signIn(){
       const isStudent = $('#ut_student').checked;
       const email  = ($('#emailInput')?.value||'').trim();
       const wechat = ($('#wechatInput')?.value||'').trim();
       if(!wechat){ alert('请填写微信号'); return; }
       if(isStudent && !email){ alert('留学生需填写邮箱'); return; }
-      if(isStudent && supabase){ try{ await supabase.auth.signInWithOtp({ email, options:{ emailRedirectTo: location.href } }); alert('验证邮件已发送，请查收'); }catch(e){ alert('登录失败：'+(e.message||'未知错误')); return; } }
       state.user={ id:'local-'+Date.now(), email: email||'', wechat, type: isStudent?'student':'other', membership:{ level:'free', expires_at:null } };
-      lsSet('unilink_user', state.user); renderUser(); closeAuth();
+      LS.set('unilink_user', state.user); renderUser(); closeAuth();
     }
-    async function signOut(){ if(supabase){ try{ await supabase.auth.signOut(); }catch{} } state.user=null; lsSet('unilink_user', null); renderUser(); alert('已退出登录'); }
+    function signOut(){ state.user=null; LS.set('unilink_user', null); renderUser(); alert('已退出登录'); }
+
+    // 绑定用户面板事件
+    $('#avatarBtn')?.addEventListener('click',()=>{ $('#overlay').classList.remove('hidden'); $('#userDrawer').classList.add('active'); });
+    $('#closeDrawerBtn')?.addEventListener('click',()=>{ $('#overlay').classList.add('hidden'); $('#userDrawer').classList.remove('active'); });
+    $('#loginBtn')?.addEventListener('click', openAuth);
+    $('#closeAuth')?.addEventListener('click', closeAuth);
     $('#doLogin')?.addEventListener('click', signIn);
     $('#logoutBtn')?.addEventListener('click', signOut);
     $('#doLogout')?.addEventListener('click', signOut);
-    renderUser();
+    $('#btnUpgradeVIP')?.addEventListener('click', upgradeVip);
+    $('#btnDowngrade')?.addEventListener('click', downgradeVip);
 
-    // 本地存储
-    function loadPosts(){ try{return JSON.parse(localStorage.getItem('unilink_posts')||'[]')}catch{return []} }
-    function savePosts(list){ localStorage.setItem('unilink_posts', JSON.stringify(list)); }
+    // 点击遮罩关闭
+    $('#overlay')?.addEventListener('click',()=>{
+      if($('#userDrawer').classList.contains('active')) { $('#overlay').classList.add('hidden'); $('#userDrawer').classList.remove('active'); return; }
+      if(!$('#verifySheet').classList.contains('hidden')){ $('#verifySheet').classList.add('hidden'); $('#overlay').classList.add('hidden'); return; }
+      if(!$('#postDetail').classList.contains('hidden')){ closePostDetail(); $('#overlay').classList.add('hidden'); return; }
+      closePublish();
+    });
 
-    // 发布
-    $('#syncTimeLbl').textContent = SYNC_TIME_LABEL;
+    // ===== 国家/院校/货币 联动 =====
+    function fillCountrySelect(el){ if(!el) return; el.innerHTML = '<option value="">全部国家/地区</option>' + COUNTRIES.map(c=>`<option value="${c}">${c}</option>`).join(''); }
+    fillCountrySelect($('#taskCountryFilter'));
+    $('#countrySelect').innerHTML = COUNTRIES.map(c=>`<option value="${c}">${c}</option>`).join('');
+    function refreshSchoolList(country){ const dl=$('#schoolList'); const arr=SCHOOLS_BY_COUNTRY[country]||[]; dl.innerHTML=arr.map(n=>`<option value="${n}"></option>`).join(''); }
+    function syncCurrency(){ const country=$('#countrySelect').value; $('#currencyUnit').textContent = currencyByCountry[country] || '$'; refreshSchoolList(country); refreshSyncLabel(); }
+    $('#countrySelect')?.addEventListener('change', syncCurrency); syncCurrency();
+
+    // ===== 图片懒加载 =====
+    document.querySelectorAll('img').forEach(img=>{img.loading=img.loading||'lazy'; img.decoding=img.decoding||'async'});
+
+    // ===== Mobile tab 高亮 =====
+    function setActiveTab(){const hash=location.hash||'#home'; $$('#mobileTabs a').forEach(a=>{const on=(a.getAttribute('href')===hash)||a.hasAttribute('data-page')&&(`#page-${a.getAttribute('data-page')}`===hash); a.classList.toggle('text-black',on); a.classList.toggle('font-semibold',on);});}
+    window.addEventListener('hashchange',setActiveTab); setActiveTab();
+
+    // ===== 弹层开关（发布） =====
+    const overlay=$('#overlay');
+    const sheet=$('#publishSheet');
+    const openPublish=()=>{ if(state.user && state.user.type==='student' && !isVerifiedStrong(state.user)){ openVerify(); alert('请先完成留学生认证，再发布。'); return; } document.body.style.overflow='hidden';
+      document.getElementById('reportSubmit')?.addEventListener('click', doReport);
+      document.getElementById('reportCancel')?.addEventListener('click', closeReport);overlay.classList.remove('hidden');sheet.classList.remove('hidden'); }
+    const closePublish=()=>{sheet.classList.add('hidden');overlay.classList.add('hidden');document.body.style.overflow='';}
+    $('#fab')?.addEventListener('click',openPublish);
+    $('#publishBtnTop')?.addEventListener('click',openPublish);
+    $('#publishBtnTrade')?.addEventListener('click',openPublish);
+    $('#closePublish')?.addEventListener('click',closePublish);
+    $('#publishTaskBtn')?.addEventListener('click',openPublish);
+    refreshSyncLabel();
+
+    // ===== 帖子数据 =====
+    function loadPosts(){ return LS.get('unilink_posts', []); }
+    function savePosts(list){ LS.set('unilink_posts', list); }
+    function postTypeName(t){ return t==='errand'?'跑腿/代购': t==='market'?'二手转让': t==='groupbuy'?'校园团购':'悬赏任务'; }
+    function currencyFor(country){ return currencyByCountry[country] || '$'; }
+
+    function cardHtml(p){
+      return `<div class="tile p-4">
+        <div class="flex items-center justify-between">
+          <div class="font-semibold">${p.title||'(无标题)'} ${p.urgent?'<span class="ml-1 text-xs text-red-600">紧急</span>':''}</div>
+          <span class="text-[13px] text-[#6e6e73]">${postTypeName(p.type)}</span>
+        </div>
+        <div class="text-[14px] mt-2 line-clamp-2">${p.desc||''}</div>
+        <div class="text-[13px] mt-2">${currencyFor(p.country)}${p.price||0} · ${p.country}${p.school?(' · '+p.school):''}${p.campus?(' · '+p.campus):''}</div>
+        <div class="mt-3 flex gap-2">
+          <button class="btn btn-outline flex-1" data-open-detail="${p.id}">查看</button>
+          <button class="btn btn-black flex-1" data-open-chat="${p.id}" data-title="${p.title||'聊天'}"><i class="fa-regular fa-comments"></i>&nbsp;聊天</button>
+        </div>
+      </div>`;
+    }
+
+    function renderPostsList(){
+      const list=loadPosts().filter(p=>p.status!=='done').sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+      $('#postsList').innerHTML = list.slice(0,9).map(cardHtml).join('') || '<div class="text-[#6e6e73]">暂无发布，点击右下角 “+” 发布。</div>';
+      bindPostButtons();
+    }
+
+    function renderTradePosts(){
+      const list=loadPosts().filter(p=>p.status!=='done');
+      const task = list.filter(p=>p.type==='task');
+      const errands = list.filter(p=>p.type==='errand');
+      const market = list.filter(p=>p.type==='market');
+      const groupbuy = list.filter(p=>p.type==='groupbuy');
+      $('#taskList').innerHTML     = task.map(cardHtml).join('') || '<div class="text-[#6e6e73]">暂无任务</div>';
+      $('#errandsList').innerHTML  = errands.map(cardHtml).join('') || '<div class="text-[#6e6e73]">暂无跑腿/代购</div>';
+      $('#marketList').innerHTML   = market.map(cardHtml).join('') || '<div class="text-[#6e6e73]">暂无二手</div>';
+      $('#groupbuyList').innerHTML = groupbuy.map(cardHtml).join('') || '<div class="text-[#6e6e73]">暂无团购</div>';
+      bindPostButtons();
+    }
+
+    function renderMyPosts(){
+      const wrap=$('#myPosts'), empty=$('#myPostsEmpty'); const posts=loadPosts();
+      if(!wrap) return; if(!posts.length){ empty?.classList.remove('hidden'); wrap.innerHTML=''; return; }
+      empty?.classList.add('hidden');
+      wrap.innerHTML=posts.map(p=>`<div class="post-item border rounded-lg p-3">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <div class="font-semibold">${p.title||'(无标题)'} <span class="text-xs text-[#6e6e73]">${postTypeName(p.type)}</span>${p.urgent?' <span class="ml-1 text-xs text-red-600">紧急</span>':''}</div>
+            <div class="text-[#6e6e73] text-[13px] mt-1 line-clamp-2">${p.desc||''}</div>
+            <div class="text-[13px] mt-1">${currencyFor(p.country)}${p.price||0} · ${p.country}${p.school?(' · '+p.school):''} · ${p.campus||''}</div>
+            ${p.urgent?'<div class="help mt-1">⏱ 已标记紧急，将于 '+SYNC_TIME_LABEL+' 自动同步到微信社区</div>':''}
+          </div>
+          <button class="text-[#6e6e73] hover:text-red-600" aria-label="删除" data-del-post="${p.id}"><i class="fa-regular fa-trash-can"></i></button>
+        </div>
+      </div>`).join('');
+      $$('#myPosts [data-del-post]').forEach(btn=>btn.addEventListener('click',e=>{ const id=Number(e.currentTarget.dataset.delPost); savePosts(loadPosts().filter(p=>p.id!==id)); renderMyPosts(); renderPostsList(); renderTradePosts(); }));
+    }
+    $('#clearMyPosts')?.addEventListener('click', ()=>{ savePosts([]); renderMyPosts(); renderPostsList(); renderTradePosts(); });
+
+    // 发布行为
     $('#publishForm').addEventListener('submit', (e)=>{
       e.preventDefault();
       if(!state.user){ alert('请先登录再发布'); return; }
@@ -823,349 +1038,529 @@
         title:f.title.value.trim(), desc:f.desc.value.trim(),
         country: f.fcountry.value, school: (f.school?.value||'').trim(),
         campus:f.campus.value.trim(), contact:f.contact.value.trim(),
-        urgent: !!f.urgent.checked, created_at:new Date().toISOString(), status:'open'
+        urgent: !!f.urgent.checked, created_at:new Date().toISOString(), status:'open', owner: state.user.wechat||state.user.email||'匿名'
       };
       const list=loadPosts();
-      // VIP 曝光：插到更靠前位置（示例）
       const isVip = state.user?.membership?.level==='vip' && (!state.user.membership.expires_at || new Date(state.user.membership.expires_at)>new Date());
       if(isVip){ list.unshift(data); } else { list.push(data); }
       savePosts(list);
-      renderMyPosts(); renderPostsList(); renderTradePosts(); updateTypePages();
+      renderMyPosts(); renderPostsList(); renderTradePosts();
       closePublish(); alert('发布成功！'); f.reset(); syncCurrency();
     });
 
-    // 我的发布（抽屉）
-    function removePost(id){ const list=loadPosts().filter(p=>p.id!==id); savePosts(list); renderMyPosts(); renderPostsList(); renderTradePosts(); updateTypePages(); }
-    function renderMyPosts(){
-      const wrap=$('#myPosts'), empty=$('#myPostsEmpty'); const posts=loadPosts();
-      if(!wrap) return; if(!posts.length){ empty?.classList.remove('hidden'); wrap.innerHTML=''; return; }
-      empty?.classList.add('hidden');
-      wrap.innerHTML=posts.map(p=>`<div class="post-item border rounded-lg p-3">
-        <div class="flex items-start justify-between gap-2">
-          <div>
-            <div class="font-semibold">${p.title||'(无标题)'} <span class="text-xs text-[#6e6e73]">${p.type==='errand'?'跑腿/代购':p.type==='market'?'二手转让':'悬赏任务'}</span>${p.urgent?' <span class="ml-1 text-xs text-red-600">紧急</span>':''}</div>
-            <div class="text-[#6e6e73] text-[13px] mt-1 line-clamp-2">${p.desc||''}</div>
-            <div class="text-[13px] mt-1">${(currencyByCountry[p.country]||'$')+(p.price||0)} · ${p.country}${p.school?(' · '+p.school):''} · ${p.campus||''}</div>
-            ${p.urgent?'<div class="help mt-1">⏱ 已标记紧急，将于 '+SYNC_TIME_LABEL+' 自动同步到微信社区</div>':''}
-          </div>
-          <button class="text-[#6e6e73] hover:text-red-600" aria-label="删除" onclick="(${removePost})(${p.id})"><i class="fa-regular fa-trash-can"></i></button>
-        </div>
-      </div>`).join('');
+    // 帖子详情 / 完成 / 复制
+    function openPostDetail(p){
+      $('#detailTitle').textContent = p.title||'详情';
+      $('#detailType').textContent  = postTypeName(p.type);
+      $('#detailDesc').textContent  = p.desc||'';
+      $('#detailPrice').textContent = currencyFor(p.country)+(p.price||0);
+      $('#detailCountry').textContent = p.country||'-';
+      $('#detailSchool').textContent = p.school||'-';
+      $('#detailCampus').textContent = p.campus||'-';
+      $('#detailContact').textContent = p.contact||'-';
+      $('#postDetail').classList.remove('hidden');
+      $('#overlay').classList.remove('hidden');
+      $('#copyContact').onclick = ()=>{ navigator.clipboard.writeText(p.contact||''); alert('已复制联系方式'); };
+      $('#markDone').onclick = ()=>{
+        const list=loadPosts().map(x=> x.id===p.id? {...x, status:'done'}:x );
+        savePosts(list); renderMyPosts(); renderPostsList(); renderTradePosts(); closePostDetail();
+      };
+      $('#openChatFromDetail').onclick = ()=> openChatRoom('post-'+p.id, p.title||'聊天');
     }
-    $('#clearMyPosts')?.addEventListener('click', ()=>{ savePosts([]); renderMyPosts(); renderPostsList(); renderTradePosts(); updateTypePages(); });
-    renderMyPosts();
+    function closePostDetail(){ $('#postDetail').classList.add('hidden'); }
+    $('#closeDetail')?.addEventListener('click', closePostDetail);
 
-    // 院校评价（示例）
-    const reviewsData=[{school:'延世大学',major:'计算机科学',course:4,life:4,career:3,score:4.1},{school:'高丽大学',major:'金融工程',course:4,life:4,career:4,score:4.4},{school:'首尔大学',major:'设计学',course:3,life:5,career:4,score:4.3}];
+    function bindPostButtons(){
+      $$('#postsList [data-open-detail],#taskList [data-open-detail],#errandsList [data-open-detail],#marketList [data-open-detail],#groupbuyList [data-open-detail]').forEach(btn=>{
+        btn.addEventListener('click',e=>{ const id=Number(e.currentTarget.dataset.openDetail); const p=loadPosts().find(x=>x.id===id); if(p) openPostDetail(p); });
+      });
+      $$('#postsList [data-open-chat],#taskList [data-open-chat],#errandsList [data-open-chat],#marketList [data-open-chat],#groupbuyList [data-open-chat]').forEach(btn=>{
+        btn.addEventListener('click',e=> openChatRoom('post-'+Number(e.currentTarget.dataset.openChat), e.currentTarget.dataset.title||'聊天') );
+      });
+    }
+
+    // ===== 院校评价数据 =====
+    const reviewsData=[
+      {school:'延世大学', majors:[
+        {name:'计算机科学',course:4,life:4,career:3,score:4.1},
+        {name:'经济学',course:3,life:4,career:4,score:4.2}
+      ]},
+      {school:'高丽大学', majors:[
+        {name:'金融工程',course:4,life:4,career:4,score:4.4},
+        {name:'传媒',course:3,life:4,career:4,score:4.0}
+      ]},
+      {school:'首尔大学', majors:[
+        {name:'设计学',course:3,life:5,career:4,score:4.3},
+        {name:'机械工程',course:4,life:4,career:5,score:4.5}
+      ]}
+    ];
     let sortKey='score', sortDir='desc', query='';
     const tbody=$('#reviewsTbody'); const search=$('#reviewsSearch');
-    function stars(n){const full=Math.round(n);return '★★★★★'.slice(0,full)+'☆☆☆☆☆'.slice(0,5-full)}
+    function stars(n){const full=Math.max(0,Math.min(5,Math.round(n)));return '★★★★★'.slice(0,full)+'☆☆☆☆☆'.slice(0,5-full)}
+    // 计算学校总体评分（基于专业+用户评价）
+    function calcSchoolAverages(s){
+  const arr = (s.majors||[]);
+  if(!arr.length) return {course:0,life:0,career:0};
+  const sum = arr.reduce((a,m)=>({course:a.course+(m.course||0), life:a.life+(m.life||0), career:a.career+(m.career||0)}), {course:0,life:0,career:0});
+  return {course: sum.course/arr.length, life: sum.life/arr.length, career: sum.career/arr.length};
+}
+function calcSchoolScore(school){
+      const base = school.majors?.map(m=>m.score).filter(Boolean) || [];
+      const userData = LS.get('unilink_school_reviews', {});
+      const extra = (userData[school.school]||[]).map(x=>x.score).filter(v=>typeof v==='number' && !isNaN(v));
+      const all = base.concat(extra);
+      if(!all.length) return 0;
+      return all.reduce((a,b)=>a+b,0)/all.length;
+    }
     function renderReviews(){
-      let rows=[...reviewsData];
-      if(query){const q=query.toLowerCase(); rows=rows.filter(r=>r.school.toLowerCase().includes(q)||r.major.toLowerCase().includes(q));}
-      rows.sort((a,b)=>{const A=a[sortKey],B=b[sortKey]; if(A===B) return 0; return (sortDir==='asc'? (A>B?1:-1):(A<B?1:-1));});
-      tbody.innerHTML=rows.map(r=>`<tr class="border-b hover:bg-[#fafafa]"><td class="py-3 px-4">${r.school}</td><td class="py-3 px-4">${r.major}</td><td class="py-3 px-4">${stars(r.course)}</td><td class="py-3 px-4">${stars(r.life)}</td><td class="py-3 px-4">${stars(r.career)}</td><td class="py-3 px-4 font-semibold">${r.score.toFixed(1)}</td></tr>`).join('');
-      $$('#reviews thead [data-sort]').forEach(th=>{th.removeAttribute('aria-sort'); if(th.dataset.sort===sortKey){th.setAttribute('aria-sort',sortDir==='asc'?'ascending':'descending');}});
-    }
-    renderReviews();
-    search?.addEventListener('input',e=>{query=e.target.value.trim(); renderReviews();});
-    $$('#reviews thead [data-sort]').forEach(th=>th.addEventListener('click',()=>{const key=th.dataset.sort; if(sortKey===key){sortDir=sortDir==='asc'?'desc':'asc';}else{sortKey=key; sortDir='desc';} renderReviews();}));
-
-    // 详情弹窗
-    function openPostDetail(id){
-      const p=loadPosts().find(x=>x.id===id); if(!p) return;
-      $('#postDetail').dataset.id=String(id);
-      $('#detailTitle').textContent=p.title||'(无标题)';
-      $('#detailType').textContent=(p.type==='errand'?'跑腿/代购':p.type==='market'?'二手转让':'悬赏任务');
-      $('#detailDesc').textContent=p.desc||'';
-      $('#detailPrice').textContent=(currencyByCountry[p.country]||'$')+(p.price||0);
-      $('#detailCountry').textContent=p.country||'';
-      $('#detailSchool').textContent=p.school||'';
-      $('#detailCampus').textContent=p.campus||'';
-      $('#detailContact').textContent=p.contact||'';
-      document.body.style.overflow='hidden'; overlay.classList.remove('hidden'); $('#postDetail').classList.remove('hidden');
-    }
-    function closePostDetail(){ $('#postDetail').classList.add('hidden'); document.body.style.overflow=''; }
-    $('#closeDetail')?.addEventListener('click',()=>{ closePostDetail(); overlay.classList.add('hidden'); });
-    document.addEventListener('click',(e)=>{
-      const btn=e.target.closest('[data-open-detail]'); if(btn){ openPostDetail(Number(btn.getAttribute('data-open-detail'))); }
-      const card=e.target.closest('#tradeMyPosts [data-id]'); if(card){ openPostDetail(Number(card.dataset.id)); }
-      const pageBtn=e.target.closest('[data-page]'); if(pageBtn){ openPage(pageBtn.getAttribute('data-page')); }
-      const backBtn=e.target.closest('[data-back]'); if(backBtn){ closePage(); }
-    });
-    $('#copyContact')?.addEventListener('click',()=>{ const txt=$('#detailContact').textContent||''; navigator.clipboard?.writeText(txt).then(()=>alert('已复制联系方式')); });
-    $('#markDone')?.addEventListener('click',()=>{ const id=Number($('#postDetail').dataset.id); if(!id) return; const list=loadPosts(); const idx=list.findIndex(p=>p.id===id); if(idx>-1){ list[idx].status='done'; savePosts(list); } closePostDetail(); overlay.classList.add('hidden'); renderTradePosts(); renderPostsList(); updateTypePages(); });
-
-    // 列表渲染（主页两块）
-    function renderTradePosts(){
-      const box=$('#tradeMyPosts'), empty=$('#tradeMyPostsEmpty'); const list=loadPosts();
-      if(!list.length){ box.innerHTML=''; empty?.classList.remove('hidden'); return; }
-      empty?.classList.add('hidden');
-      box.innerHTML=list.slice(0,8).map(p=>`<article class="tile p-5 cursor-pointer" data-id="${p.id}">
-        <div class="text-xs text-[#6e6e73]">${p.type==='errand'?'跑腿/代购':p.type==='market'?'二手转让':'悬赏任务'} · ${new Date(p.created_at).toLocaleDateString()}${p.status==='done'?' · 已完成':''}${p.urgent?' · 紧急':''}</div>
-        <h4 class="font-semibold mt-1 line-clamp-1">${p.title||'(无标题)'}</h4>
-        <div class="text-[14px] mt-1 line-clamp-2">${p.desc||''}</div>
-        <div class="text-[14px] mt-2">${(currencyByCountry[p.country]||'$')+(p.price||0)} · ${p.country}${p.school?(' · '+p.school):''}</div>
-      </article>`).join('');
-    }
-
-    function renderPostsList(){
-      const wrap=$('#postsList'); const list=loadPosts(); if(!wrap) return;
-      if(!list.length){ wrap.innerHTML='<div class="text-[#6e6e73]">暂无用户发布</div>'; return; }
-      wrap.innerHTML=list.slice(0,9).map(p=>`<div class="tile p-4 flex flex-col justify-between">
-        <div>
-          <div class="font-semibold mb-1 flex items-center gap-2">${p.title}${p.vip?' <span class=\"text-xs text-yellow-600\">VIP</span>':''}</div>
-          <div class="text-[14px] text-[#6e6e73] mb-2">${p.type==='errand'?'跑腿/代购':p.type==='market'?'二手转让':'悬赏任务'} · ${(currencyByCountry[p.country]||'$')+p.price}${p.urgent?' · <span class="text-red-600">紧急</span>':''}</div>
-          <div class="text-[14px] line-clamp-2 mb-2">${p.desc}</div>
-          <div class="text-[13px] text-[#6e6e73]">${p.country}${p.school?(' · '+p.school):''} · ${p.campus||''}</div>
-        </div>
-        <button class="btn btn-outline mt-3" data-open-detail="${p.id}">查看详情</button>
+      // rows include school + computed overall score; star columns from major averages
+      let rows = reviewsData.map(s=>{
+        const avg = calcSchoolAverages(s);
+        return { school:s.school, score:calcSchoolScore(s)||0, course:avg.course, life:avg.life, career:avg.career };
+      });
+      if(query){ const q=query.toLowerCase(); rows = rows.filter(r=> r.school.toLowerCase().includes(q)); }
+      rows.sort((a,b)=>{ const A=a[sortKey], B=b[sortKey]; if(A===B) return 0; return (sortDir==='asc'? (A>B?1:-1):(A<B?1:-1)); });
+      tbody.innerHTML = rows.map(r=>`<tr class="border-b hover:bg-[#fafafa]">
+        <td class="py-3 px-4">${r.school}</td>
+        <td class="py-3 px-4">${stars(r.course)}</td>
+        <td class="py-3 px-4">${stars(r.life)}</td>
+        <td class="py-3 px-4">${stars(r.career)}</td>
+        <td class="py-3 px-4 font-semibold">${r.score ? r.score.toFixed(1) : '—'}</td>
+        <td class="py-3 px-4"><button class="btn btn-outline" data-open-school="${r.school}">详情</button></td>
+      </tr>`).join('');
+      // 卡片视图也加入按钮
+      $('#reviewsAll').innerHTML = rows.map(r=>`<div class="tile p-4">
+        <div class="font-semibold">${r.school}</div>
+        <div class="mt-2 text-[14px]">课程强度：${stars(r.course)}</div>
+        <div class="text-[14px]">生活便利：${stars(r.life)}</div>
+        <div class="text-[14px]">就业资源：${stars(r.career)}</div>
+        <div class="mt-1">综合评分：<b>${r.score? r.score.toFixed(1):'—'}</b></div>
+        <button class="btn btn-outline mt-3" data-open-school="${r.school}">详情</button>
       </div>`).join('');
+      $$('#reviewsAll [data-open-school], #reviewsTbody [data-open-school]').forEach(b=> b.addEventListener('click', e=> openSchoolDetail(e.currentTarget.dataset.openSchool) ));
+    }
+    search?.addEventListener('input', e=>{ query=e.target.value.trim(); renderReviews(); });('input', e=>{ query=e.target.value.trim(); renderReviews(); });
+    $$('#reviews thead [data-sort]').forEach(th=> th.addEventListener('click',()=>{ const k=th.getAttribute('data-sort'); sortDir = (sortKey===k && sortDir==='desc')? 'asc':'desc'; sortKey=k; renderReviews(); }));
+
+    // ===== 社区卡片 & 话题 =====
+    const defaultTopics=[
+      {id:'topic-exam', title:'期末高效复习法', meta:'延世 · 计算机 · 120 评论'},
+      {id:'topic-job', title:'校内兼职怎么找？', meta:'高丽 · 商学院 · 78 评论'},
+      {id:'topic-rent', title:'2025 租房避坑指南', meta:'首尔 · 住房 · 233 评论'},
+      {id:'topic-korean', title:'韩语学习交流', meta:'语言学习 · 89 评论'}
+    ];
+    function renderCommunityCards(){
+      $('#communityCards').innerHTML = defaultTopics.slice(0,3).map(t=>`
+        <article class="tile p-6 cursor-pointer" data-page="${t.id}">
+          <h4 class="font-semibold">${t.title}</h4>
+          <p class="sub mt-1">${t.meta}</p>
+          <button class="chat-action-btn mt-3" data-open-topic="${t.id}" data-title="${t.title}"><i class="fa-regular fa-comment-dots"></i> 加入讨论</button>
+        </article>`).join('');
+      $$('#communityCards [data-open-topic]').forEach(btn=> btn.addEventListener('click', e=> openChatRoom(e.currentTarget.dataset.openTopic, e.currentTarget.dataset.title) ));
     }
 
-    // 页面路由
-    let currentPage=null; const pageHistory=[];
-    function openPage(pageId){ const pageDom=document.getElementById(`page-${pageId}`); if(!pageDom) return; pageHistory.push(pageId); pageDom.classList.add('active'); currentPage=pageId; document.body.style.overflow='hidden'; updateTypePages(); if(pageId==='membership'){ renderMembershipPage(); } }
-    function closePage(){ if(pageHistory.length===0) return; pageHistory.pop(); const pageDom=document.getElementById(`page-${currentPage}`); if(pageDom){ pageDom.classList.remove('active'); } if(pageHistory.length===0){ currentPage=null; document.body.style.overflow=''; } else { currentPage=pageHistory[pageHistory.length-1]; document.getElementById(`page-${currentPage}`).classList.add('active'); } }
-
-    function renderTypeList(type, containerSel){
-      const el = $(containerSel); if(!el) return; const q = $('#taskSearch')?.value?.trim()?.toLowerCase()||''; const ctry=$('#taskCountryFilter')?.value||'';
-      const list = loadPosts().filter(p=>p.type===type).filter(p=> !ctry || p.country===ctry).filter(p=> !q || p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
-      if(!list.length){ el.innerHTML = '<div class="text-[#6e6e73]">暂无相关发布</div>'; return; }
-      el.innerHTML = list.map(p=>`<div class="tile p-4">
-        <div class="text-xs text-[#6e6e73]">${new Date(p.created_at).toLocaleString()}${p.urgent?' · 紧急':''}</div>
-        <div class="font-semibold mt-1 flex items-center gap-2">${p.title}${p.vip?' <span class=\"text-xs text-yellow-600\">VIP</span>':''}</div>
-        <div class="text-[14px] mt-1 line-clamp-2">${p.desc}</div>
-        <div class="text-[14px] mt-2">${(currencyByCountry[p.country]||'$')+(p.price||0)} · ${p.country}${p.school?(' · '+p.school):''} · ${p.campus||''}</div>
-        <div class="mt-3 flex gap-2">
-          <button class="btn btn-outline flex-1" data-open-detail="${p.id}">查看</button>
-          <button class="btn btn-black flex-1" onclick="navigator.clipboard?.writeText('${p.contact||''}').then(()=>alert('已复制联系方式'))">联系</button>
+    // 社区首页话题列表 + 发帖
+    function loadTopics(){ return LS.get('unilink_topics', defaultTopics.map(t=> ({...t, body:'欢迎交流～'}))); }
+    function saveTopics(v){ LS.set('unilink_topics', v); }
+    function renderTopicHome(){
+      const list = loadTopics();
+      $('#topicList').innerHTML = list.map(t=>`<div class="border rounded p-3 mb-2">
+        <div class="font-semibold">${t.title}</div>
+        <div class="text-[13px] text-[#6e6e73]">${t.meta||''}</div>
+        <div class="mt-2 flex gap-2">
+          <button class="btn btn-outline" data-go-topic="${t.id}">查看</button>
+          <button class="btn btn-black" data-topic-chat="${t.id}" data-title="${t.title}"><i class="fa-regular fa-comments"></i>&nbsp;聊天</button>
         </div>
       </div>`).join('');
+      $$('#topicList [data-go-topic]').forEach(b=>b.addEventListener('click',e=> openPage(e.currentTarget.dataset.goTopic) ));
+      $$('#topicList [data-topic-chat]').forEach(b=>b.addEventListener('click',e=> openChatRoom(e.currentTarget.dataset.topicChat, e.currentTarget.dataset.title) ));
     }
-
-    function updateTypePages(){ renderTypeList('task', '#taskList'); renderTypeList('errand', '#errandsList'); renderTypeList('market', '#marketList'); renderTypeList('groupbuy', '#groupbuyList'); }
-
-    $('#taskCountryFilter')?.addEventListener('change', ()=>{ updateTypePages(); });
-    $('#taskSearch')?.addEventListener('input', ()=>{ updateTypePages(); });
-    $('#publishTaskBtn')?.addEventListener('click', ()=>{ openPublish(); document.querySelector('#publishForm select[name=type]').value='task'; });
-
-    // 会员中心逻辑
-    function renderMembershipPage(){
-      if(!state.user){ $('#memLevelText').textContent='未登录'; $('#memExpireText').textContent='请先登录'; return; }
-      ensureMembership();
-      const m = state.user.membership; const now = new Date();
-      const valid = m.level==='vip' && (!m.expires_at || new Date(m.expires_at)>now);
-      $('#memLevelText').textContent = valid? 'VIP' : 'Free';
-      $('#memExpireText').textContent = valid && m.expires_at ? ('有效期至 '+ new Date(m.expires_at).toLocaleString()) : (valid? '长期有效' : '—');
-      $('#vipUpgradeBtn')?.classList.toggle('hidden', valid);
-    }
-    
-    function renderMembership(){
-      const level = document.getElementById('memberLevelText');
-      const badge = document.getElementById('memberBadge');
-      const expire= document.getElementById('memberExpire');
-      const upgradeBtn = document.getElementById('btnUpgradeVIP');
-      const downgradeBtn = document.getElementById('btnDowngrade');
-      
-      if(!state.user){ 
-        level.textContent = 'Free（普通用户）';
-        badge.style.display = 'none';
-        expire.textContent = '到期时间：—';
-        upgradeBtn.style.display = 'block';
-        downgradeBtn.style.display = 'none';
-        return;
-      }
-      
-      ensureMembership();
-      const m = state.user.membership; 
-      const now = new Date();
-      const valid = m.level==='vip' && (!m.expires_at || new Date(m.expires_at)>now);
-      
-      level.textContent = valid ? 'VIP（尊享会员）' : 'Free（普通用户）';
-      badge.style.display = valid ? 'inline-flex' : 'none';
-      expire.textContent = valid && m.expires_at ? ('到期时间：'+new Date(m.expires_at).toLocaleDateString()) : '到期时间：—';
-      upgradeBtn.style.display = valid ? 'none' : 'block';
-      downgradeBtn.style.display = valid ? 'block' : 'none';
-    }
-    
-    $('#btnUpgradeVIP')?.addEventListener('click', ()=>{
+    $('#topicForm')?.addEventListener('submit', e=>{
+      e.preventDefault();
       if(!state.user){ alert('请先登录'); return; }
-      const expire = new Date(); expire.setDate(expire.getDate()+30);
-      state.user.membership={ level:'vip', expires_at: expire.toISOString() };
-      lsSet('unilink_user', state.user); 
-      renderUser(); 
-      alert('已开通 VIP 试用 30 天');
+      const title = $('#topicTitle').value.trim(), body = $('#topicBody').value.trim();
+      if(!title || !body) return;
+      const id = 'topic-'+Date.now();
+      const list = loadTopics();
+      list.unshift({id,title,meta:`${state.user.wechat||state.user.email||'用户'} · 新话题`, body});
+      saveTopics(list); $('#topicTitle').value=''; $('#topicBody').value=''; renderTopicHome(); alert('已发布');
     });
+
+    // ===== 路由：打开/返回 =====
+    function openPage(id){
+      const page = document.querySelector('#page-'+id);
+      if(!page){ return; }
+      $$('#pageRouter .page').forEach(p=>p.classList.remove('active'));
+      page.classList.add('active');
+      document.body.style.overflow='hidden';
+      document.getElementById('reportSubmit')?.addEventListener('click', doReport);
+      document.getElementById('reportCancel')?.addEventListener('click', closeReport);
+    }
+    function closePage(){ $$('#pageRouter .page').forEach(p=>p.classList.remove('active')); document.body.style.overflow=''; }
+    $$('#pageRouter [data-back]').forEach(btn=> btn.addEventListener('click', closePage));
+    $$('#home [data-page], #trade [data-page], #resources [data-page], header [data-page]').forEach(el=> el.addEventListener('click', e=> openPage(e.currentTarget.dataset.page) ));
+
+    // ===== 聊天（本地持久化，多聊天室） =====
+    const chat = {
+      currentRoom: null,
+      load(room){ return LS.get('unilink_chat_'+room, []); },
+      save(room, msgs){ LS.set('unilink_chat_'+room, msgs); },
+      send(room, text){
+        const msgs = chat.load(room);
+        msgs.push({ id: Date.now(), from: state.user?.wechat||state.user?.email||'游客', text, ts: new Date().toISOString() });
+        chat.save(room, msgs);
+      }
+    };
+    function renderChat(room){
+      const msgs = chat.load(room);
+      const me = state.user?.wechat||state.user?.email||'游客';
+      $('#chatMessages').innerHTML = msgs.map(m=>`
+        <div class="chat-item ${m.from===me?'chat-me':''}">
+          <div class="chat-bubble">${m.text}</div>
+        </div>
+      `).join('');
+      $('#chatMessages').scrollTop = $('#chatMessages').scrollHeight;
+    }
+    function openChatRoom(room, title){
+      chat.currentRoom = room;
+      $('#chatRoomTitle').textContent = title||'聊天';
+      $('#chatRoomBadge').textContent = '#'+room;
+      $('#chatPanel').classList.add('active');
+      renderChat(room);
+    }
+    function closeChat(){ $('#chatPanel').classList.remove('active'); }
+    $('#closeChatBtn')?.addEventListener('click', closeChat);
+    $('#chatSendBtn')?.addEventListener('click', ()=>{
+      const text = $('#chatInput').value.trim(); if(!text) return;
+      chat.send(chat.currentRoom, text); $('#chatInput').value=''; renderChat(chat.currentRoom);
+    });
+    $('#chatInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('#chatSendBtn').click(); } });
+
+    // 通用聊天入口按钮（右下角）打开默认大厅
+    $('#chatToggleBtn')?.addEventListener('click', ()=> openChatRoom('lobby', '公共聊天'));
+
+    // ===== 聊天大厅示例数据（可由发布/话题自动生成） =====
+    function renderTradeLobby(){
+      const list = loadPosts().slice(0,6);
+      $('#tradeLobby').innerHTML = list.map(p=>`
+        <div class="chat-room-card">
+          <div class="chat-room-header">
+            <div class="chat-room-avatar">U</div>
+            <div class="chat-room-title">${p.title}</div>
+            <span class="chat-room-badge">#${postTypeName(p.type)}</span>
+          </div>
+          <div class="chat-room-body">
+            <div class="chat-room-desc">${p.desc}</div>
+            <div class="chat-room-meta">
+              <span><i class="fa-regular fa-user"></i> ${p.owner||'用户'}</span>
+              <span><i class="fa-regular fa-clock"></i> 刚刚</span>
+            </div>
+          </div>
+          <div class="chat-room-footer">
+            <button class="chat-action-btn" data-open-chat-room="post-${p.id}" data-title="${p.title}">
+              <i class="fa-regular fa-comment"></i> 加入聊天
+            </button>
+            <span class="text-[#6e6e73] text-sm">在线: ~</span>
+          </div>
+        </div>
+      `).join('') || '<div class="text-[#6e6e73]">暂无活跃交易聊天，去发布一个？</div>';
+      $$('#tradeLobby [data-open-chat-room]').forEach(b=> b.addEventListener('click', e=> openChatRoom(e.currentTarget.dataset.openChatRoom, e.currentTarget.dataset.title) ));
+    }
+    function renderCommunityLobby(){
+      const list = loadTopics().slice(0,6);
+      $('#communityLobby').innerHTML = list.map(t=>`
+        <div class="chat-room-card">
+          <div class="chat-room-header">
+            <div class="chat-room-avatar">U</div>
+            <div class="chat-room-title">${t.title}</div>
+            <span class="chat-room-badge">话题</span>
+          </div>
+          <div class="chat-room-body">
+            <div class="chat-room-desc">${t.body?.slice(0,60)||'欢迎交流～'}</div>
+            <div class="chat-room-meta">
+              <span><i class="fa-regular fa-user"></i> ${t.meta||'社区'}</span>
+            </div>
+          </div>
+          <div class="chat-room-footer">
+            <button class="chat-action-btn" data-open-chat-room="${t.id}" data-title="${t.title}">
+              <i class="fa-regular fa-comment"></i> 加入讨论
+            </button>
+            <span class="text-[#6e6e73] text-sm">在线: ~</span>
+          </div>
+        </div>
+      `).join('');
+      $$('#communityLobby [data-open-chat-room]').forEach(b=> b.addEventListener('click', e=> openChatRoom(e.currentTarget.dataset.openChatRoom, e.currentTarget.dataset.title) ));
+    }
+
+    // ===== 搜索/过滤 =====
+    $('#taskSearch')?.addEventListener('input', e=>{
+      const kw = e.target.value.toLowerCase();
+      const list = loadPosts().filter(p=> p.type==='task' && (p.title.toLowerCase().includes(kw) || p.desc.toLowerCase().includes(kw)) );
+      $('#taskList').innerHTML = list.map(cardHtml).join('') || '<div class="text-[#6e6e73]">未找到匹配任务</div>';
+      bindPostButtons();
+    });
+    $('#taskCountryFilter')?.addEventListener('change', e=>{
+      const c = e.target.value;
+      const list = loadPosts().filter(p=> p.type==='task' && (!c || p.country===c) );
+      $('#taskList').innerHTML = list.map(cardHtml).join('') || '<div class="text-[#6e6e73]">暂无任务</div>';
+      bindPostButtons();
+    });
+
+    // ===== 初始化数据 & 渲染 =====
+    function bootstrapDemoData(){
+      if(loadPosts().length===0){
+        const seed=[
+          {id:Date.now()-1,type:'market',price:600000,title:'二手 iPad Pro 11 2021',desc:'九成新，带原装笔。',country:'韩国',school:'嘉泉大学',campus:'城南',contact:'wechat:ipad_pro',urgent:false,created_at:new Date().toISOString(),status:'open',owner:'李同学'},
+          {id:Date.now()-2,type:'errand',price:5000,title:'代取快递',desc:'周三下午3点，高丽大学正门快递点。',country:'韩国',school:'高丽大学',campus:'安岩',contact:'wechat:delivery',urgent:false,created_at:new Date().toISOString(),status:'open',owner:'张同学'},
+          {id:Date.now()-3,type:'task',price:20000,title:'搬运行李',desc:'周末搬宿舍，需两人帮忙。',country:'韩国',school:'延世大学',campus:'新村',contact:'wechat:moving',urgent:true,created_at:new Date().toISOString(),status:'open',owner:'金同学'}
+        ];
+        savePosts(seed);
+      }
+      if(!LS.get('unilink_topics', null)){
+        saveTopics(defaultTopics.map(t=> ({...t, body:'欢迎交流～'})));
+      }
+    }
+
+    // 导航绑定（卡片点击打开页面）
+    $$('#home [data-page], #trade [data-page]').forEach(el=> el.addEventListener('click', e=> openPage(e.currentTarget.dataset.page) ));
+
     
-    $('#btnDowngrade')?.addEventListener('click', ()=>{
-      if(!state.user) return;
-      state.user.membership={ level:'free', expires_at: null };
-      lsSet('unilink_user', state.user);
-      renderUser();
-      alert('已取消 VIP');
+    // ===== 认证弹窗逻辑 =====
+    function openVerify(){ if(!state.user){ openAuth(); return; } $('#overlay').classList.remove('hidden'); $('#verifySheet').classList.remove('hidden'); yearsOptions(); updateCalcExpire(); }
+    function closeVerify(){ $('#verifySheet').classList.add('hidden'); if($('#overlay'))$('#overlay').classList.add('hidden'); }
+    function updateCalcExpire(){
+      const y = Number($('#enrollYear')?.value||new Date().getFullYear());
+      const years = Number($('#programYears')?.value||4);
+      const exp = computeExpire(y, years);
+      const el = $('#calcExpire'); if(el) el.textContent = new Date(exp).toLocaleDateString();
+    }
+    function submitVerify(e){
+      e.preventDefault();
+      if(!state.user){ openAuth(); return; }
+      const docType = (Array.from(document.querySelectorAll('input[name="docType"]')).find(r=>r.checked)?.value)||'enroll';
+      const file = $('#verifyFile')?.files?.[0];
+      const enroll_year = Number($('#enrollYear')?.value||new Date().getFullYear());
+      const program_years = Number($('#programYears')?.value||4);
+      if(!file){ alert('请上传在读证明或录取通知书'); return; }
+      const expires_at = computeExpire(enroll_year, program_years);
+      state.user.verification = { level:'strong', method:docType, enroll_year, program_years, file_name:file.name, status:'approved', expires_at };
+      LS.set('unilink_user', state.user);
+      renderUser(); closeVerify();
+      alert('认证成功：有效期至 '+ new Date(expires_at).toLocaleDateString());
+    }
+
+    // 绑定事件
+    $('#btnOpenVerify')?.addEventListener('click', openVerify);
+    $('#btnReverify')?.addEventListener('click', openVerify);
+    $('#goVerify')?.addEventListener('click', openVerify);
+    $('#closeVerify')?.addEventListener('click', closeVerify);
+    $('#verifyForm')?.addEventListener('submit', submitVerify);
+    $('#enrollYear')?.addEventListener('change', updateCalcExpire);
+    $('#programYears')?.addEventListener('change', updateCalcExpire);
+
+    // 点击遮罩时关闭认证弹窗（已存在遮罩逻辑中包含）
+
+    
+    // ===== 院校详情渲染与评分（仅已认证的留学生可评价） =====
+    // ==== 评论增强：图片 / 置顶 / 举报 ====
+    function readFilesToDataURLs(files, maxCount=3, maxSize=1572864){
+      return new Promise((resolve)=>{
+        const out=[];
+        const list = Array.from(files||[]).slice(0, maxCount);
+        if(!list.length) return resolve(out);
+        let i=0;
+        const next=()=>{
+          const f=list[i++]; if(!f){ resolve(out); return; }
+          if(f.size>maxSize){ next(); return; }
+          const reader=new FileReader();
+          reader.onload=()=>{ out.push(reader.result); next(); };
+          reader.onerror=()=>{ next(); };
+          reader.readAsDataURL(f);
+        };
+        next();
+      });
+    }
+    let _reportTarget = null; // {school, index}
+    function openReport(school, idx){
+      _reportTarget = {school, idx};
+      document.getElementById('reportModal').classList.remove('hidden');
+    }
+    function closeReport(){
+      document.getElementById('reportModal').classList.add('hidden');
+      _reportTarget = null;
+    }
+    function doReport(){
+      if(!_reportTarget) return closeReport();
+      const reason = document.getElementById('reportReason').value;
+      const extra = document.getElementById('reportExtra').value.trim();
+      const all = loadSchoolUserReviews();
+      const arr = all[_reportTarget.school] || [];
+      const it = arr[_reportTarget.idx];
+      if(!it.reports) it.reports = [];
+      it.reports.push({reason, extra, ts: new Date().toISOString(), by: state.user?.wechat||state.user?.email||'用户'});
+      all[_reportTarget.school] = arr; saveSchoolUserReviews(all);
+      closeReport();
+      openSchoolDetail(_reportTarget.school);
+      alert('已提交举报，我们会尽快处理。');
+    }
+    function togglePin(school, idx){
+      const all = loadSchoolUserReviews();
+      const arr = all[school] || [];
+      arr[idx].pinned = !arr[idx].pinned;
+      all[school] = arr; saveSchoolUserReviews(all);
+      openSchoolDetail(school);
+    }
+
+    function findSchool(name){ return reviewsData.find(s=>s.school===name); }
+    function loadSchoolUserReviews(){ return LS.get('unilink_school_reviews', {}); }
+    function saveSchoolUserReviews(v){ LS.set('unilink_school_reviews', v); }
+    function openSchoolDetail(name){
+      const s = findSchool(name); if(!s) return;
+      const page = document.querySelector('#page-school-detail');
+      if(!page) return;
+      // 标题
+      $('#schoolDetailTitle').textContent = s.school;
+      // 概览
+      const avg = calcSchoolScore(s);
+      $('#schoolSummary').innerHTML = `<div class="flex items-center justify-between">
+        <div>
+          <div class="font-semibold text-lg">${s.school}</div>
+          <div class="text-[14px] text-[#6e6e73]">共有 ${s.majors.length} 个专业（展示部分评分为示例）</div>
+        </div>
+        <div class="text-right">
+          <div class="text-[13px] text-[#6e6e73]">综合评分</div>
+          <div class="text-2xl font-bold">${avg?avg.toFixed(1):'—'}</div>
+        </div>
+      </div>`;
+      // 专业列表
+      $('#schoolMajors').innerHTML = s.majors.map(m=>`<div class="border rounded p-3 mb-2">
+        <div class="font-semibold">${m.name}</div>
+        <div class="text-[14px] mt-1">课程强度：${stars(m.course)} · 生活便利：${stars(m.life)} · 就业资源：${stars(m.career)}</div>
+        <div class="text-[14px] mt-1">专业评分：<b>${m.score.toFixed(1)}</b></div>
+      </div>`).join('');
+      
+      
+      // 学生评论列表（置顶优先 -> 已认证 -> 时间倒序；被多次举报的弱化显示）
+      const store = loadSchoolUserReviews();
+      let items = (store[s.school] || []).map((it, idx)=>({...it, _idx: idx}));
+      items = items.sort((a,b)=>{
+        const pa = a.pinned?1:0, pb = b.pinned?1:0;
+        if(pa!==pb) return pb - pa;
+        const va = a.verified?1:0, vb = b.verified?1:0;
+        if(va!==vb) return vb - va;
+        return new Date(b.ts) - new Date(a.ts);
+      });
+      $('#schoolAvgScore').textContent = items.length ? `学生评论（${items.length}）` : '学生评论（0）';
+      $('#schoolReviewsList').innerHTML = items.map(it=>{
+        const reportedCount = (it.reports||[]).length;
+        const imgs = (it.images||[]).map(src=>`<img src="${src}" alt="img">`).join('');
+        return `<div class="border rounded p-3 ${reportedCount>=3?'cmt-reported':''}">
+          <div class="flex items-center justify-between">
+            <div class="font-semibold text-[14px]">${it.user||'匿名'} ${it.pinned?'<span class="cmt-badge">置顶</span>':''}</div>
+            <div class="text-[12px]">${it.verified ? '<span class="badge"><b>U</b> 已认证</span>' : '<span class="badge">未认证</span>'}</div>
+          </div>
+          ${typeof it.score==='number' ? `<div class="text-[14px] mt-1">评分：<b>${it.score.toFixed(1)}</b></div>` : ''}
+          <div class="text-[14px] mt-1">${it.text||''}</div>
+          ${imgs? `<div class="cmt-images">${imgs}</div>` : ''}
+          <div class="text-[12px] text-[#6e6e73] mt-1">${new Date(it.ts).toLocaleString()} ${reportedCount?`· 已被举报 ${reportedCount} 次`:''}</div>
+          <div class="cmt-actions">
+            <button data-pin="${it._idx}">${it.pinned?'取消置顶':'置顶'}</button>
+            <button data-report="${it._idx}">举报</button>
+          </div>
+        </div>`;
+      }).join('') || '<div class="text-[#6e6e73]">还没有评论，来说两句吧～</div>';
+      // 绑定置顶/举报
+      $$('#schoolReviewsList [data-pin]').forEach(btn=> btn.addEventListener('click', e=> togglePin(s.school, Number(e.currentTarget.dataset.pin)) ));
+      $$('#schoolReviewsList [data-report]').forEach(btn=> btn.addEventListener('click', e=> openReport(s.school, Number(e.currentTarget.dataset.report)) ));
+      // 评价表单
+    
+（任何登录用户可评论；仅“已认证留学生”可评分）
+      const canScore = state.user && state.user.type==='student' && isVerifiedStrong(state.user);
+      if(state.user){
+        $('#schoolReviewFormWrap').innerHTML = `<form id="schoolReviewForm" class="grid gap-2">
+          ${canScore ? `
+            <div>
+              <label class="block text-sm text-[#6e6e73] mb-1">打分（1-5，已认证留学生）</label>
+              <input id="schoolScoreInput" type="number" min="1" max="5" step="1" value="5" class="w-full border rounded px-3 py-2"/>
+            </div>` : ``}
+          <div>
+            <label class="block text-sm text-[#6e6e73] mb-1">评论</label>
+            <textarea id="schoolTextInput" rows="2" class="w-full border rounded px-3 py-2" placeholder="分享你的真实体验…"></textarea>
+          </div>
+          <div><label class="block text-sm text-[#6e6e73] mb-1">上传图片（最多3张，每张≤1.5MB）</label><input id="schoolImgInput" type="file" accept=".jpg,.jpeg,.png" multiple/></div><div id="schoolImgPreview" class="cmt-images"></div><button class="btn btn-black" type="submit">提交</button>
+          <div class="help">${canScore ? '你的身份：已认证留学生，可评分并评论' : '你的身份：未认证 / 非留学生，可发表评论（评分仅限已认证留学生）'}</div>
+        </form>`;
+        $('#schoolImgInput')?.addEventListener('change', e=>{ readFilesToDataURLs(e.target.files).then(imgs=>{ $('#schoolImgPreview').innerHTML = imgs.map(src=>`<img src="${src}" alt="pre">`).join(''); }); });
+        $('#schoolReviewForm')?.addEventListener('submit', e=>{
+          e.preventDefault();
+          const text = ($('#schoolTextInput').value||'').trim();
+          if(!text){ alert('请填写评论'); return; }
+          const scoreVal = canScore ? Number($('#schoolScoreInput').value||5) : null;
+          const score = canScore ? Math.max(1, Math.min(5, scoreVal)) : null;
+          const files = $('#schoolImgInput')?.files;
+          readFilesToDataURLs(files).then(imgs=>{
+            const all = loadSchoolUserReviews();
+            const arr = all[s.school] || [];
+            arr.push({ 
+              score, 
+              text, 
+              images: imgs,
+              user: state.user.wechat||state.user.email||'用户', 
+              verified: canScore ? true : (state.user?.verification && isVerifiedStrong(state.user) ? true : false),
+              ts: new Date().toISOString() 
+            });
+            all[s.school] = arr; saveSchoolUserReviews(all);
+            openSchoolDetail(s.school); // 重新渲染
+            renderReviews();
+            alert('提交成功！');
+          });
+          renderReviews(); // 列表页综合分更新（仅计入带分数的评价）
+          alert('提交成功！');
+        });
+      }else{
+        $('#schoolReviewFormWrap').innerHTML = '<div class="help">请先登录后发表评论；评分仅限已认证留学生。</div><button class="btn btn-outline mt-2" onclick="openAuth()">登录 / 注册</button>';
+      }
+
+      // 打开页面
+
+      $$('#pageRouter .page').forEach(p=>p.classList.remove('active'));
+      page.classList.add('active');
+      document.body.style.overflow='hidden';
+      document.getElementById('reportSubmit')?.addEventListener('click', doReport);
+      document.getElementById('reportCancel')?.addEventListener('click', closeReport);
+    }
+
+    
+    // ===== 路由与页面切换绑定 =====
+    // 首页/导航上的按钮：data-page="taskhall/community-home/reviews-all/..."
+    document.querySelectorAll('[data-page]').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const id = btn.getAttribute('data-page');
+        if(id) openPage(id);
+      });
+    });
+    // 页面内返回按钮：data-back
+    document.querySelectorAll('[data-back]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        $$('#pageRouter .page').forEach(p=>p.classList.remove('active'));
+        document.body.style.overflow='auto';
+      });
     });
 
     // 初始渲染
-    renderTradePosts(); renderPostsList(); updateTypePages();
-
-    // ESC 关闭
-    window.addEventListener('keydown',(e)=>{
-      if(e.key!=='Escape') return;
-      if(currentPage){ closePage(); return; }
-      if(!$('#postDetail').classList.contains('hidden')){ closePostDetail(); overlay.classList.add('hidden'); return; }
-      closePublish();
-    });
-
-    // 刷新按钮
-    $('#refreshPosts')?.addEventListener('click', ()=>{ renderPostsList(); });
-
-    // ===== 聊天系统实现 =====
-    (function(){
-      // 工具函数
-      const jget=(k,def)=>{ try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(def))}catch{return def} };
-      const jset=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
-
-      // 聊天状态 (仅本地; 服务端 TODO)
-      const CHAT_KEY='unilink_chats_v2';
-      const loadChats=()=>jget(CHAT_KEY,{});
-      const saveChats=(v)=>jset(CHAT_KEY,v);
-
-      const chatPanel=$('#chatPanel'), chatList=$('#chatMessages'), chatTitle=$('#chatRoomTitle'), chatBadge=$('#chatRoomBadge'), chatInput=$('#chatInput');
-      const chatToggleBtn=$('#chatToggleBtn'), chatNotification=$('#chatNotification');
-      const chatState={ roomId:'global', title:'全站群聊', msgs:[] };
-
-      function renderChat(){
-        chatList.innerHTML = (chatState.msgs||[]).map(m=>{
-          const u = jget('unilink_user',null);
-          const me = u && m.uid === (u.id||'');
-          return `
-            <div class="chat-item ${me?'chat-me':''}"><div class="chat-bubble">${(m.text||'').replace(/</g,'&lt;')}</div></div>
-            <div class="chat-item ${me?'chat-me':''}"><div class="chat-meta">${new Date(m.ts).toLocaleString()} · ${me?'我':(m.uname||'对方')}</div></div>`;
-        }).join('');
-        chatList.scrollTop = chatList.scrollHeight;
-        
-        // 更新通知计数
-        updateNotificationCount();
-      }
-
-      function openChat(roomId,title){
-        const all=loadChats(); 
-        chatState.roomId=roomId; 
-        chatState.title=title; 
-        chatState.msgs=all[roomId]||[];
-        
-        chatTitle.textContent=title; 
-        chatBadge.textContent=`房间ID：${roomId}`;
-        chatPanel.classList.add('active'); 
-        renderChat(); 
-        chatInput?.focus();
-        
-        // 清除该房间的通知
-        clearRoomNotification(roomId);
-      }
-      
-      function closeChat(){ 
-        chatPanel.classList.remove('active'); 
-      }
-      
-      function sendMsg(){
-        const text=(chatInput.value||'').trim(); 
-        if(!text) return;
-        
-        let user = jget('unilink_user',null);
-        if(!user){ alert('请先登录再发言'); return; }
-        
-        const msg={ 
-          uid:user.id||'', 
-          uname:user.wechat||user.email||'用户', 
-          text, 
-          ts:Date.now() 
-        };
-        
-        const all=loadChats(); 
-        const arr=all[chatState.roomId]||[]; 
-        arr.push(msg); 
-        all[chatState.roomId]=arr; 
-        saveChats(all);
-        
-        chatState.msgs=arr; 
-        chatInput.value=''; 
-        renderChat();
-        
-        // TODO: 推送到服务端 (Supabase Realtime / WebSocket)
-      }
-      
-      function updateNotificationCount(){
-        const all = loadChats();
-        let total = 0;
-        
-        // 计算所有房间的未读消息
-        Object.keys(all).forEach(roomId => {
-          if(roomId !== chatState.roomId) {
-            total += all[roomId].length;
-          }
-        });
-        
-        if(total > 0) {
-          chatNotification.textContent = total > 99 ? '99+' : total;
-          chatNotification.style.display = 'flex';
-        } else {
-          chatNotification.style.display = 'none';
-        }
-      }
-      
-      function clearRoomNotification(roomId){
-        // 实现清除特定房间通知的逻辑
-        updateNotificationCount();
-      }
-
-      // 绑定事件
-      chatToggleBtn?.addEventListener('click',()=>openChat('global','全站群聊'));
-      $('#chatSendBtn')?.addEventListener('click',sendMsg);
-      chatInput?.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); sendMsg(); }});
-      $('#closeChatBtn')?.addEventListener('click',closeChat);
-
-      // 从详情页打开聊天
-      document.addEventListener('click',(e)=>{
-        const btn=e.target.closest('#openChatFromDetail,[data-open-chat-detail]');
-        if(btn){
-          // 尝试读取当前详情页的ID/标题
-          let rid='trade-post', title='交易聊天';
-          const modal=document.querySelector('#detailModal, #postDetail');
-          if(modal){
-            const id = modal.getAttribute('data-id') || modal.dataset.id || '';
-            rid = `trade-post-${id||'unknown'}`;
-            const t = document.querySelector('#detailTitle'); 
-            if(t) title = `交易聊天 · ${t.textContent.trim()}`;
-          }
-          openChat(rid, title);
-        }
-      });
-
-      // 从话题打开聊天
-      document.addEventListener('click',(e)=>{
-        const b=e.target.closest('[data-open-topic-chat]');
-        if(b){ 
-          openChat(
-            b.getAttribute('data-room'), 
-            b.getAttribute('data-title')||'社区聊天'
-          ); 
-        }
-      });
-      
-      // 聊天大厅标签切换
-      document.querySelectorAll('.chat-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-          document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          // 这里可以添加切换不同标签内容的逻辑
-        });
-      });
-      
-      // 初始化通知计数
-      updateNotificationCount();
+    (function init(){
+      bootstrapDemoData(); yearsOptions();
+      renderUser();
+      renderPostsList();
+      renderTradePosts();
+      renderCommunityCards();
+      renderTopicHome();
+      renderReviews();
+      renderTradeLobby(); refreshSyncLabel();
+      renderCommunityLobby();
     })();
+
   </script>
 </body>
 </html>
