@@ -843,7 +843,44 @@
       el.innerHTML = Array.from({length: to-from+1}, (_,i)=>from+i).map(y=>`<option ${y===thisYear?'selected':''}>${y}</option>`).join('');
     }
 
-    const state = { user: LS.get('unilink_user', null) };
+    // Maintain logged-in user and a cached list of posts fetched from backend
+    const state = { user: LS.get('unilink_user', null), posts: [] };
+
+    // ====== Backend API Helpers ======
+    // Fetch all posts from the server and cache in state.posts
+    async function fetchPosts(){
+      try{
+        const res = await fetch('/api/posts');
+        const json = await res.json();
+        state.posts = json.data || [];
+      }catch(err){
+        console.error('Failed to fetch posts', err);
+        state.posts = [];
+      }
+      return state.posts;
+    }
+    // Create a new post via API
+    async function createPost(postData){
+      const res = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(postData)
+      });
+      const json = await res.json();
+      return json.data;
+    }
+    // Delete a post by id
+    async function deletePost(id){
+      await fetch(`/api/posts?id=${id}`, { method: 'DELETE' });
+    }
+    // Mark a post as done by id
+    async function markDonePost(id){
+      await fetch(`/api/posts?id=${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'done' })
+      });
+    }
     function ensureMembership(){
       if(!state.user) return;
       if(!state.user.membership){ state.user.membership = { level:'free', expires_at:null }; LS.set('unilink_user', state.user); }
@@ -990,14 +1027,17 @@ function renderUser(){
       </div>`;
     }
 
-    function renderPostsList(){
-      const list=loadPosts().filter(p=>p.status!=='done').sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+async function renderPostsList(){
+      // Ensure state.posts is up to date from backend
+      await fetchPosts();
+      const list=(state.posts || []).filter(p=>p.status!=='done').sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
       $('#postsList').innerHTML = list.slice(0,9).map(cardHtml).join('') || '<div class="text-[#6e6e73]">暂无发布，点击右下角 “+” 发布。</div>';
       bindPostButtons();
     }
 
-    function renderTradePosts(){
-      const list=loadPosts().filter(p=>p.status!=='done');
+async function renderTradePosts(){
+      await fetchPosts();
+      const list=(state.posts || []).filter(p=>p.status!=='done');
       const task = list.filter(p=>p.type==='task');
       const errands = list.filter(p=>p.type==='errand');
       const market = list.filter(p=>p.type==='market');
@@ -1009,11 +1049,20 @@ function renderUser(){
       bindPostButtons();
     }
 
-    function renderMyPosts(){
-      const wrap=$('#myPosts'), empty=$('#myPostsEmpty'); const posts=loadPosts();
-      if(!wrap) return; if(!posts.length){ empty?.classList.remove('hidden'); wrap.innerHTML=''; return; }
+async function renderMyPosts(){
+      const wrap=$('#myPosts'), empty=$('#myPostsEmpty');
+      await fetchPosts();
+      const all = state.posts || [];
+      // Filter posts belonging to current user by matching contact with user.wechat/email
+      const my = all.filter(p=> state.user && (p.contact=== (state.user.wechat||state.user.email)));
+      if(!wrap) return;
+      if(!my.length){
+        empty?.classList.remove('hidden');
+        wrap.innerHTML='';
+        return;
+      }
       empty?.classList.add('hidden');
-      wrap.innerHTML=posts.map(p=>`<div class="post-item border rounded-lg p-3">
+      wrap.innerHTML=my.map(p=>`<div class="post-item border rounded-lg p-3">
         <div class="flex items-start justify-between gap-2">
           <div>
             <div class="font-semibold">${p.title||'(无标题)'} <span class="text-xs text-[#6e6e73]">${postTypeName(p.type)}</span>${p.urgent?' <span class="ml-1 text-xs text-red-600">紧急</span>':''}</div>
@@ -1024,28 +1073,45 @@ function renderUser(){
           <button class="text-[#6e6e73] hover:text-red-600" aria-label="删除" data-del-post="${p.id}"><i class="fa-regular fa-trash-can"></i></button>
         </div>
       </div>`).join('');
-      $$('#myPosts [data-del-post]').forEach(btn=>btn.addEventListener('click',e=>{ const id=Number(e.currentTarget.dataset.delPost); savePosts(loadPosts().filter(p=>p.id!==id)); renderMyPosts(); renderPostsList(); renderTradePosts(); }));
+      $$('#myPosts [data-del-post]').forEach(btn=>btn.addEventListener('click',async e=>{
+        const id=Number(e.currentTarget.dataset.delPost);
+        await deletePost(id);
+        await fetchPosts();
+        await renderMyPosts(); await renderPostsList(); await renderTradePosts();
+      }));
     }
-    $('#clearMyPosts')?.addEventListener('click', ()=>{ savePosts([]); renderMyPosts(); renderPostsList(); renderTradePosts(); });
+    $('#clearMyPosts')?.addEventListener('click', async ()=>{
+      await fetchPosts();
+      const my = (state.posts||[]).filter(p=> state.user && (p.contact=== (state.user.wechat||state.user.email)));
+      await Promise.all(my.map(p=> deletePost(p.id)));
+      await fetchPosts();
+      await renderMyPosts(); await renderPostsList(); await renderTradePosts();
+    });
 
-    // 发布行为
-    $('#publishForm').addEventListener('submit', (e)=>{
+    // 发布行为：提交到后端 API
+    $('#publishForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
       if(!state.user){ alert('请先登录再发布'); return; }
       const f=e.target;
-      const data={
-        id:Date.now(), type:f.type.value, price:Number(f.price.value||0),
-        title:f.title.value.trim(), desc:f.desc.value.trim(),
-        country: f.fcountry.value, school: (f.school?.value||'').trim(),
-        campus:f.campus.value.trim(), contact:f.contact.value.trim(),
-        urgent: !!f.urgent.checked, created_at:new Date().toISOString(), status:'open', owner: state.user.wechat||state.user.email||'匿名'
+      const payload={
+        type: f.type.value,
+        price: Number(f.price.value||0),
+        title: f.title.value.trim(),
+        desc: f.desc.value.trim(),
+        country: f.fcountry.value,
+        campus: f.campus.value.trim(),
+        contact: f.contact.value.trim(),
+        urgent: !!f.urgent.checked
       };
-      const list=loadPosts();
-      const isVip = state.user?.membership?.level==='vip' && (!state.user.membership.expires_at || new Date(state.user.membership.expires_at)>new Date());
-      if(isVip){ list.unshift(data); } else { list.push(data); }
-      savePosts(list);
-      renderMyPosts(); renderPostsList(); renderTradePosts();
-      closePublish(); alert('发布成功！'); f.reset(); syncCurrency();
+      try{
+        await createPost(payload);
+        await fetchPosts();
+        await renderMyPosts(); await renderPostsList(); await renderTradePosts();
+        closePublish(); alert('发布成功！'); f.reset(); syncCurrency();
+      }catch(err){
+        console.error(err);
+        alert('发布失败，请稍后再试');
+      }
     });
 
     // 帖子详情 / 完成 / 复制
@@ -1061,9 +1127,11 @@ function renderUser(){
       $('#postDetail').classList.remove('hidden');
       $('#overlay').classList.remove('hidden');
       $('#copyContact').onclick = ()=>{ navigator.clipboard.writeText(p.contact||''); alert('已复制联系方式'); };
-      $('#markDone').onclick = ()=>{
-        const list=loadPosts().map(x=> x.id===p.id? {...x, status:'done'}:x );
-        savePosts(list); renderMyPosts(); renderPostsList(); renderTradePosts(); closePostDetail();
+      $('#markDone').onclick = async ()=>{
+        await markDonePost(p.id);
+        await fetchPosts();
+        await renderMyPosts(); await renderPostsList(); await renderTradePosts();
+        closePostDetail();
       };
       $('#openChatFromDetail').onclick = ()=> openChatRoom('post-'+p.id, p.title||'聊天');
     }
@@ -1072,7 +1140,11 @@ function renderUser(){
 
     function bindPostButtons(){
       $$('#postsList [data-open-detail],#taskList [data-open-detail],#errandsList [data-open-detail],#marketList [data-open-detail],#groupbuyList [data-open-detail]').forEach(btn=>{
-        btn.addEventListener('click',e=>{ const id=Number(e.currentTarget.dataset.openDetail); const p=loadPosts().find(x=>x.id===id); if(p) openPostDetail(p); });
+        btn.addEventListener('click',e=>{
+          const id=Number(e.currentTarget.dataset.openDetail);
+          const p=(state.posts||[]).find(x=>x.id===id);
+          if(p) openPostDetail(p);
+        });
       });
       $$('#postsList [data-open-chat],#taskList [data-open-chat],#errandsList [data-open-chat],#marketList [data-open-chat],#groupbuyList [data-open-chat]').forEach(btn=>{
         btn.addEventListener('click',e=> openChatRoom('post-'+Number(e.currentTarget.dataset.openChat), e.currentTarget.dataset.title||'聊天') );
@@ -1240,8 +1312,9 @@ function calcSchoolScore(school){
     $('#chatToggleBtn')?.addEventListener('click', ()=> openChatRoom('lobby', '公共聊天'));
 
     // ===== 聊天大厅示例数据（可由发布/话题自动生成） =====
-    function renderTradeLobby(){
-      const list = loadPosts().slice(0,6);
+    async function renderTradeLobby(){
+      await fetchPosts();
+      const list = (state.posts || []).slice(0,6);
       $('#tradeLobby').innerHTML = list.map(p=>`
         <div class="chat-room-card">
           <div class="chat-room-header">
@@ -1252,7 +1325,7 @@ function calcSchoolScore(school){
           <div class="chat-room-body">
             <div class="chat-room-desc">${p.desc}</div>
             <div class="chat-room-meta">
-              <span><i class="fa-regular fa-user"></i> ${p.owner||'用户'}</span>
+              <span><i class="fa-regular fa-user"></i> ${p.contact||'用户'}</span>
               <span><i class="fa-regular fa-clock"></i> 刚刚</span>
             </div>
           </div>
@@ -1293,29 +1366,24 @@ function calcSchoolScore(school){
     }
 
     // ===== 搜索/过滤 =====
-    $('#taskSearch')?.addEventListener('input', e=>{
+    $('#taskSearch')?.addEventListener('input', async e=>{
       const kw = e.target.value.toLowerCase();
-      const list = loadPosts().filter(p=> p.type==='task' && (p.title.toLowerCase().includes(kw) || p.desc.toLowerCase().includes(kw)) );
+      await fetchPosts();
+      const list = (state.posts||[]).filter(p=> p.type==='task' && ((p.title||'').toLowerCase().includes(kw) || (p.desc||'').toLowerCase().includes(kw)) );
       $('#taskList').innerHTML = list.map(cardHtml).join('') || '<div class="text-[#6e6e73]">未找到匹配任务</div>';
       bindPostButtons();
     });
-    $('#taskCountryFilter')?.addEventListener('change', e=>{
+    $('#taskCountryFilter')?.addEventListener('change', async e=>{
       const c = e.target.value;
-      const list = loadPosts().filter(p=> p.type==='task' && (!c || p.country===c) );
+      await fetchPosts();
+      const list = (state.posts||[]).filter(p=> p.type==='task' && (!c || p.country===c) );
       $('#taskList').innerHTML = list.map(cardHtml).join('') || '<div class="text-[#6e6e73]">暂无任务</div>';
       bindPostButtons();
     });
 
     // ===== 初始化数据 & 渲染 =====
     function bootstrapDemoData(){
-      if(loadPosts().length===0){
-        const seed=[
-          {id:Date.now()-1,type:'market',price:600000,title:'二手 iPad Pro 11 2021',desc:'九成新，带原装笔。',country:'韩国',school:'嘉泉大学',campus:'城南',contact:'wechat:ipad_pro',urgent:false,created_at:new Date().toISOString(),status:'open',owner:'李同学'},
-          {id:Date.now()-2,type:'errand',price:5000,title:'代取快递',desc:'周三下午3点，高丽大学正门快递点。',country:'韩国',school:'高丽大学',campus:'安岩',contact:'wechat:delivery',urgent:false,created_at:new Date().toISOString(),status:'open',owner:'张同学'},
-          {id:Date.now()-3,type:'task',price:20000,title:'搬运行李',desc:'周末搬宿舍，需两人帮忙。',country:'韩国',school:'延世大学',campus:'新村',contact:'wechat:moving',urgent:true,created_at:new Date().toISOString(),status:'open',owner:'金同学'}
-        ];
-        savePosts(seed);
-      }
+      // Seed default topics but do not seed posts; posts are fetched from backend
       if(!LS.get('unilink_topics', null)){
         saveTopics(defaultTopics.map(t=> ({...t, body:'欢迎交流～'})));
       }
