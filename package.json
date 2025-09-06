@@ -1,0 +1,14 @@
+{
+  "name": "unilink",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo \"No build step\""
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "@vercel/node": "^3.2.18",
+    "typescript": "^5.5.4"
+  }
+}
