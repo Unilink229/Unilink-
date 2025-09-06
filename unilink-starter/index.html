@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>留学中｜Unilink</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{ --brand:#1d1d1f; --ink:#1d1d1f; --line:#d2d2d7; --radius:20px }
+    .container-apple{max-width:1200px;margin:0 auto;padding:0 24px}
+    .tile{border-radius:var(--radius);border:1px solid var(--line);background:#fff}
+  </style>
+</head>
+<body class="bg-white text-[var(--ink)]">
+  <header class="border-b">
+    <div class="container-apple py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2"><span class="w-8 h-8 rounded-full bg-black text-white grid place-content-center">U</span><b>Unilink</b></div>
+      <div class="flex items-center gap-3">
+        <button id="publishBtnTop" class="px-4 py-2 rounded-full border">发布</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-apple py-8">
+    <h2 class="text-2xl font-semibold mb-4">最新发布</h2>
+    <div class="mb-3"><button id="refreshPosts" class="text-sm text-gray-600 hover:text-black">刷新</button></div>
+    <div id="postsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- 遮罩 -->
+  <div id="overlay" class="fixed inset-0 bg-black/40 hidden"></div>
+
+  <!-- 发布表单 -->
+  <div id="publishSheet" class="fixed left-1/2 -translate-x-1/2 bottom-6 w-[92%] max-w-xl bg-white rounded-2xl shadow-2xl border p-6 hidden">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-semibold">发布到 Unilink</h3>
+      <button id="closePublish"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="publishForm" class="grid gap-4">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">类型</label>
+          <select name="type" class="w-full rounded-xl border px-3 py-2">
+            <option value="errand">跑腿/代购</option>
+            <option value="market">二手转让</option>
+            <option value="task">悬赏任务</option>
+            <option value="groupbuy">校园团购</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">价格</label>
+          <input name="price" type="number" min="0" class="w-full rounded-xl border px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">国家/地区</label>
+          <input name="fcountry" class="w-full rounded-xl border px-3 py-2" placeholder="韩国/美国…" />
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">院校</label>
+          <input name="school" class="w-full rounded-xl border px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">校区/城市</label>
+          <input name="campus" class="w-full rounded-xl border px-3 py-2" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">标题</label>
+        <input name="title" class="w-full rounded-xl border px-3 py-2" required />
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">详细说明</label>
+        <textarea name="desc" rows="3" class="w-full rounded-xl border px-3 py-2" required></textarea>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">联系方式</label>
+          <input name="contact" class="w-full rounded-xl border px-3 py-2" />
+        </div>
+        <label class="inline-flex items-center gap-2 mt-8">
+          <input type="checkbox" name="urgent" /> 紧急（自动同步）
+        </label>
+      </div>
+      <div class="flex items-center justify-end gap-3">
+        <button type="button" id="cancelPublish" class="px-4 py-2 rounded-full border">取消</button>
+        <button class="px-4 py-2 rounded-full bg-black text-white" type="submit">发布</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 详情弹窗 -->
+  <div id="postDetail" class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-lg bg-white rounded-2xl shadow-2xl border p-6 hidden">
+    <div class="flex items-center justify-between mb-3"><h3 id="detailTitle" class="text-lg font-semibold">详情</h3><button id="closeDetail"><i class="fas fa-times"></i></button></div>
+    <div class="space-y-2 text-[15px]">
+      <div class="text-gray-600" id="detailType">—</div>
+      <div id="detailDesc">—</div>
+      <div class="text-sm">价格：<b id="detailPrice">—</b></div>
+      <div class="text-sm">国家：<span id="detailCountry">—</span></div>
+      <div class="text-sm">院校：<span id="detailSchool">—</span></div>
+      <div class="text-sm">校区：<span id="detailCampus">—</span></div>
+      <div class="text-sm">联系方式：<span id="detailContact">—</span></div>
+    </div>
+    <div class="mt-4 flex gap-2">
+      <button id="copyContact" class="px-4 py-2 rounded-full border flex-1">复制联系方式</button>
+      <button id="markDone" class="px-4 py-2 rounded-full bg-black text-white flex-1">标记完成</button>
+    </div>
+  </div>
+
+  <script>
+    // ===== Supabase 初始化（前端可用, 使用 NEXT_PUBLIC_* 环境变量部署） =====
+    const SUPABASE_URL = window.SUPABASE_URL || "https://your-project.supabase.co";
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "your-anon-key";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ===== 发布 & 列表 =====
+    function el(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstElementChild; }
+    function fmtPrice(v){ if(v===null||v===undefined||v==='') return '—'; return String(v); }
+
+    function renderPostCard(p){
+      return el(\`
+        <div class="tile p-4">
+          <div class="text-xs text-gray-600 mb-1">\${p.type || '发布'}</div>
+          <div class="font-semibold">\${p.title || '未命名'}</div>
+          <div class="text-sm mt-1">\${p.desc || p.content || ''}</div>
+          <div class="text-xs text-gray-600 mt-1">
+            价格：\${fmtPrice(p.price)} · \${p.country || ''} · \${p.school || ''}
+          </div>
+          <div class="flex gap-2 mt-3">
+            <button class="px-3 py-1 rounded-full border" data-detail='\${JSON.stringify(p).replace(/'/g,"&apos;")}'>查看</button>
+          </div>
+        </div>      \`);
+    }
+
+    async function loadPosts(){
+      const wrap = document.getElementById('postsList');
+      if(!wrap) return;
+      wrap.innerHTML = '<div class="text-gray-600">加载中…</div>';
+      try{
+        const res = await fetch('/api/posts');
+        const json = await res.json();
+        if(!res.ok) throw new Error(json?.error || 'load failed');
+        const list = Array.isArray(json.data) ? json.data : [];
+        wrap.innerHTML = '';
+        if(list.length===0){
+          wrap.innerHTML = '<div class="text-gray-600">暂无发布</div>';
+          return;
+        }
+        list.forEach(p => wrap.appendChild(renderPostCard(p)));
+      }catch(err){
+        console.error(err);
+        wrap.innerHTML = '<div class="text-red-600">加载失败</div>';
+      }
+    }
+
+    function bindPostDetail(){
+      const wrap = document.getElementById('postsList');
+      const detail = document.getElementById('postDetail');
+      const overlay = document.getElementById('overlay');
+      if(!wrap || !detail || !overlay) return;
+      wrap.addEventListener('click', (e)=>{
+        const btn = e.target.closest('[data-detail]');
+        if(!btn) return;
+        const data = JSON.parse(btn.getAttribute('data-detail').replace(/&apos;/g,"'"));
+        document.getElementById('detailTitle').textContent = data.title || '详情';
+        document.getElementById('detailType').textContent = data.type || '—';
+        document.getElementById('detailDesc').textContent = data.desc || data.content || '—';
+        document.getElementById('detailPrice').textContent = fmtPrice(data.price);
+        document.getElementById('detailCountry').textContent = data.country || '—';
+        document.getElementById('detailSchool').textContent = data.school || '—';
+        document.getElementById('detailCampus').textContent = data.campus || '—';
+        document.getElementById('detailContact').textContent = data.contact || '—';
+        detail.classList.remove('hidden'); overlay.classList.remove('hidden');
+      });
+      document.getElementById('closeDetail')?.addEventListener('click', ()=>{ detail.classList.add('hidden'); overlay.classList.add('hidden'); });
+    }
+
+    function bindPublishForm(){
+      const sheet = document.getElementById('publishSheet');
+      const overlay = document.getElementById('overlay');
+      const form = document.getElementById('publishForm');
+      const openBtns = [document.getElementById('publishBtnTop')].filter(Boolean);
+      const closeBtn = document.getElementById('closePublish');
+      const cancelBtn = document.getElementById('cancelPublish');
+
+      function open(){ sheet?.classList.remove('hidden'); overlay?.classList.remove('hidden'); }
+      function close(){ sheet?.classList.add('hidden'); overlay?.classList.add('hidden'); }
+
+      openBtns.forEach(b=>b.addEventListener('click', open));
+      closeBtn?.addEventListener('click', close);
+      cancelBtn?.addEventListener('click', close);
+
+      form?.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const fd = new FormData(form);
+        const payload = {
+          type: fd.get('type'),
+          price: Number(fd.get('price') || 0),
+          fcountry: fd.get('fcountry'),
+          school: fd.get('school'),
+          campus: fd.get('campus'),
+          title: fd.get('title'),
+          desc: fd.get('desc'),
+          contact: fd.get('contact'),
+          urgent: !!fd.get('urgent'),
+          user_id: null
+        };
+        try{
+          const res = await fetch('/api/posts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          const json = await res.json();
+          if(!res.ok) throw new Error(json?.error || '发布失败');
+          close();
+          await loadPosts();
+          alert('发布成功！');
+          form.reset();
+        }catch(err){
+          console.error(err);
+          alert('发布失败，请稍后再试');
+        }
+      });
+    }
+
+    document.getElementById('copyContact')?.addEventListener('click', ()=>{
+      const txt = document.getElementById('detailContact')?.textContent || '';
+      if(!txt) return;
+      navigator.clipboard?.writeText(txt).then(()=>alert('已复制联系方式'));
+    });
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      bindPublishForm();
+      bindPostDetail();
+      loadPosts();
+    });
+  </script>
+</body>
+</html>
